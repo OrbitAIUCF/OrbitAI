@@ -14,7 +14,6 @@ OrbitAI will rely on a variety of data sources to ensure accurate predictions:
    - Primary source of Space Debris data: https://discosweb.esoc.esa.int/
 - **Environmental Factors**: Data on solar radiation, atmospheric drag, and gravitational perturbations that affect satellite paths (May be implemented later).
 
-This data will be gathered from open-source repositories, space tracking networks, and agencies such as NASA, ESA, and commercial satellite tracking services.
 
 ---
 
@@ -26,7 +25,6 @@ To achieve accurate predictions, several types of neural networks will be employ
 - **Long Short Term Memory Model (LSTM)**: For handling the vanishing/exploding gradient problem that traditional RNNs face.
 - **Graph Neural Networks (GNNs)**: For modeling relationships between multiple satellites in a constellation, facilitating coordination (May be implemented later).
 
-These networks will be trained to predict satellite positions, velocities, and potential collision zones while considering dynamic factors such as environmental perturbations.
 
 ---
 
@@ -38,7 +36,6 @@ These networks will be trained to predict satellite positions, velocities, and p
 - **Reinforcement Learning**: Applying RL techniques for autonomous satellite maneuvers, allowing satellites to make real-time decisions based on collision risk.
 - **Simulation-based Training**: Creating simulated satellite orbits to augment the dataset, particularly for rare events like satellite collisions, to improve model robustness.
 
-The training will involve iterative testing using both real and simulated data to optimize the neural networks’ prediction accuracy.
 
 ---
 
@@ -48,7 +45,6 @@ To validate the trained models and test real-time predictions, **OrbitAI** will 
 
 Simulations will also help refine maneuver strategies by allowing virtual trial-and-error of satellite responses to predicted collisions.
 
-A custom website for the project may also be developed. The site would have embedded footage of a simulation demonstration. But the main focus is on the development of the model.
 
 ---
 
