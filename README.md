@@ -4,12 +4,6 @@
 
 ---
 
-## Overview
-
-**OrbitAI** focuses on building an AI-powered system for satellite collision prediction. Using machine learning, this project integrates real-time satellite data, environmental perturbations, and space debris tracking to predict the likelihood of collisions. The goal is to enable satellites to autonomously predict and avoid collisions, thereby protecting critical space infrastructure and reducing operational risks.
-
----
-
 ## Data Sources
 
 OrbitAI will rely on a variety of data sources to ensure accurate predictions:
@@ -29,7 +23,7 @@ This data will be gathered from open-source repositories, space tracking network
 To achieve accurate predictions, several types of neural networks will be employed:
 
 - **Recurrent Neural Networks (RNNs)**: For handling time-series data and predicting satellite trajectories over time based on past movement.
-- **Long Short Term Memory Model (LSTM) **: For handling the vanishing/exploding gradient problem that traditional RNNs face.
+- **Long Short Term Memory Model (LSTM)**: For handling the vanishing/exploding gradient problem that traditional RNNs face.
 - **Graph Neural Networks (GNNs)**: For modeling relationships between multiple satellites in a constellation, facilitating coordination (May be implemented later).
 
 These networks will be trained to predict satellite positions, velocities, and potential collision zones while considering dynamic factors such as environmental perturbations.
@@ -56,4 +50,8 @@ Simulations will also help refine maneuver strategies by allowing virtual trial-
 
 A custom website for the project may also be developed. The site would have embedded footage of a simulation demonstration. But the main focus is on the development of the model.
 
+---
 
+## Tools & Utilities
+
+- **CI/CD**: OrbitAI Developers have automated many of the version control processes. When a developer pushes new code or makes a pull request, GitHub creates a fresh Ubuntu virtual machine instance, downloads all required dependencies onto the VM, and checks out the rest of the repository all to perform tests for safe integration.
