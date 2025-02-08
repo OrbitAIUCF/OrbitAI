@@ -1,5 +1,7 @@
 # OrbitAI: AI-Driven Satellite Collision Prevention Model
 
+![My Image](Diagrams/FunnyDiagram.png)
+
 **OrbitAI** leverages machine learning to predict potential collisions between satellites and space debris, ensuring the safety and efficiency of space operations. By using real-time data, neural networks, and space simulators, this project aims to enhance satellite autonomy and improve space traffic management.
 
 ---
