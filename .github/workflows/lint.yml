@@ -23,3 +23,6 @@ jobs:
         
       - name: Run Flake8 (Static Analysis)
         run: flake8 .
+
+      - name: Run Linter
+        run: flake8 src/ --max-line-length=150 --ignore=W391
