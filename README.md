@@ -29,6 +29,7 @@ This data will be gathered from open-source repositories, space tracking network
 To achieve accurate predictions, several types of neural networks will be employed:
 
 - **Recurrent Neural Networks (RNNs)**: For handling time-series data and predicting satellite trajectories over time based on past movement.
+- **Long Short Term Memory Model (LSTM) **: For handling the vanishing/exploding gradient problem that traditional RNNs face.
 - **Graph Neural Networks (GNNs)**: For modeling relationships between multiple satellites in a constellation, facilitating coordination (May be implemented later).
 
 These networks will be trained to predict satellite positions, velocities, and potential collision zones while considering dynamic factors such as environmental perturbations.
