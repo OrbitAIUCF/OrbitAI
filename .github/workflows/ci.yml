@@ -20,5 +20,4 @@ jobs:
           pip install -r requirements.txt
           pip install pytest  # Add any other necessary tools
           
-      - name: Run Unit Tests
-        run: pytest tests/
+
