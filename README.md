@@ -45,11 +45,14 @@ To achieve accurate predictions, several types of neural networks will be employ
 
 To validate the trained models and test real-time predictions, **OrbitAI** will integrate with space simulators like Orekit or GMAT (General Mission Analysis Tool). These simulators allow the virtual testing of satellite constellations and debris interactions, providing a controlled environment to evaluate the models' effectiveness.
 
-Simulations will also help refine maneuver strategies by allowing virtual trial-and-error of satellite responses to predicted collisions.
+- **Simulations** will also help refine maneuver strategies by allowing virtual trial-and-error of satellite responses to predicted collisions.
 
 
 ---
 
 ## Tools & Utilities
 
-- **CI/CD**: OrbitAI Developers have automated many of the version control processes. When a developer pushes new code or makes a pull request, GitHub creates a fresh Ubuntu virtual machine instance, downloads all required dependencies onto the VM, and checks out the rest of the repository all to perform tests for safe integration.
+- **CI/CD**: OrbitAI Developers have automated many of the version control processes.
+     - When a developer pushes new code or makes a pull request, GitHub creates a fresh Ubuntu virtual machine instance, downloads all required dependencies onto the VM, and checks out the rest of the repository all to perform tests for safe integration.
+ 
+---
