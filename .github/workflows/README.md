@@ -13,6 +13,7 @@ This project includes two automated workflows:
 
 ### **Code Linting (lint.yml)**
 **Location:** `.github/workflows/lint.yml` 
+
 📌 **What it does:**  
 
 - Runs on every push or pull request.
