@@ -12,8 +12,7 @@ This project includes two automated workflows:
 - Ensures the codebase remains stable.
 
 ### **Code Linting (lint.yml)**
-**Location:** `.github/workflows/lint.yml` 
-
+**Location:** `.github/workflows/lint.yml`  
 📌 **What it does:**  
 
 - Runs on every push or pull request.
