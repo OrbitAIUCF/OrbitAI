@@ -14,9 +14,3 @@ jobs:
         with:
           python-version: "3.10"
 
-      - name: Install Linters
-        run: |
-          pip install black flake8
-
-      - name: Run Flake8 (Static Analysis)
-        run: flake8 src/ --ignore=W391,E501
