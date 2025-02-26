@@ -69,5 +69,5 @@ start_time = datetime.now(timezone.utc)
 #We apply it using the wrapper function
 df["propagated"] = df.apply(propagate_row, axis = 1)
 
-df.to_csv("tle_data_propagated", index=False)
+df.to_csv("tle_data_propagated.csv", index=False)
 
