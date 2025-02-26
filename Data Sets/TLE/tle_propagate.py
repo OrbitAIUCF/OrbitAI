@@ -16,6 +16,8 @@ from datetime import datetime, timedelta, timezone
 #Load the dataframe
 df = pd.read_csv("tle_data.csv")
 
+
+
 def propagate_orbit(tle1, tle2, start_time, duration=60, step=10):
     '''
 
@@ -26,6 +28,7 @@ def propagate_orbit(tle1, tle2, start_time, duration=60, step=10):
     :param step: The time interval between each propagated step
     :return: The position and velocity
     '''
+
 
     #Satrec is used to represent a satellite's orbital parameters and handle the propagation through the SGP4 model
     #WGS72 (World Geodetic System 1972) model is a standard model for Earth's gravitational parameters.
@@ -57,7 +60,18 @@ def propagate_orbit(tle1, tle2, start_time, duration=60, step=10):
 
         if (e == 0):
             #Append the current time stamp, position, and velocity
-            results.append([t, position, velocity])
+            results.append({
+                "timestamp": t,
+                "position_x": position[0],
+                "position_y": position[1],
+                "position_z": position[2],
+                "velocity_x": velocity[0],
+                "velocity_y": velocity[1],
+                "velocity_z": velocity[2]
+            })
+
+
+    return results
 
 def propagate_row(row):
     return propagate_orbit(row["tle_line1"], row["tle_line2"], start_time)
