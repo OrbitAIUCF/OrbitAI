@@ -12,13 +12,15 @@ from sgp4.api import Satrec, jday
 from sgp4.api import WGS72
 import pandas as pd
 from datetime import datetime, timedelta, timezone
+import numpy as np
+import matplotlib.pyplot as plt
 
 #Load the dataframe
 df = pd.read_csv("tle_data.csv")
 
 
 
-def propagate_orbit(tle1, tle2, start_time, duration=60, step=10):
+def propagate_orbit(tle1, tle2, start_time, duration=225, step=60):
     '''
 
     :param tle1: The first line of the TLE
@@ -76,6 +78,84 @@ def propagate_orbit(tle1, tle2, start_time, duration=60, step=10):
 def propagate_row(row):
     return propagate_orbit(row["tle_line1"], row["tle_line2"], start_time)
 
+def graph_positions(df):
+    # Iterate through each row (satellite) and create separate plots
+    for index, row in df.iterrows():
+        propagated_data = row["propagated"]
+
+        # Extract time, x, y, z values
+        timestamps = [item["timestamp"] for item in propagated_data]
+        x_values = [item["position_x"] for item in propagated_data]
+        y_values = [item["position_y"] for item in propagated_data]
+        z_values = [item["position_z"] for item in propagated_data]
+
+        # Create x vs. time plot
+        plt.figure()  # Create a new figure for each satellite
+        plt.plot(timestamps, x_values)
+        plt.xlabel("Time (UTC)")
+        plt.ylabel("Position X (km)")
+        plt.title(f"Position X vs. Time (Satellite {index + 1})")
+        plt.grid(True)
+        plt.show()
+
+        # Create y vs. time plot
+        plt.figure()
+        plt.plot(timestamps, y_values)
+        plt.xlabel("Time (UTC)")
+        plt.ylabel("Position Y (km)")
+        plt.title(f"Position Y vs. Time (Satellite {index + 1})")
+        plt.grid(True)
+        plt.show()
+
+        # Create z vs. time plot
+        plt.figure()
+        plt.plot(timestamps, z_values)
+        plt.xlabel("Time (UTC)")
+        plt.ylabel("Position Z (km)")
+        plt.title(f"Position Z vs. Time (Satellite {index + 1})")
+        plt.grid(True)
+        plt.show()
+
+def graph_velocities(df):
+    # Iterate through each row (satellite) and create separate plots
+    for index, row in df.iterrows():
+        propagated_data = row["propagated"]
+
+        # Extract time, x, y, z values
+        timestamps = [item["timestamp"] for item in propagated_data]
+        x_values = [item["velocity_x"] for item in propagated_data]
+        y_values = [item["velocity_y"] for item in propagated_data]
+        z_values = [item["velocity_z"] for item in propagated_data]
+
+        # Create x vs. time plot
+        plt.figure()  # Create a new figure for each satellite
+        plt.plot(timestamps, x_values)
+        plt.xlabel("Time (UTC)")
+        plt.ylabel("Velocity X (km/s)")
+        plt.title(f"Velocity X vs. Time (Satellite {index + 1})")
+        plt.grid(True)
+        plt.show()
+
+        # Create y vs. time plot
+        plt.figure()
+        plt.plot(timestamps, y_values)
+        plt.xlabel("Time (UTC)")
+        plt.ylabel("Velocity Y (km/s)")
+        plt.title(f"Velocity Y vs. Time (Satellite {index + 1})")
+        plt.grid(True)
+        plt.show()
+
+        # Create z vs. time plot
+        plt.figure()
+        plt.plot(timestamps, z_values)
+        plt.xlabel("Time (UTC)")
+        plt.ylabel("Velocity Z (km/s)")
+        plt.title(f"Velocity Z vs. Time (Satellite {index + 1})")
+        plt.grid(True)
+        plt.show()
+
+
+
 # Get the current UTC time using datetime.now() with timezone set to UTC
 start_time = datetime.now(timezone.utc)
 
@@ -83,5 +163,11 @@ start_time = datetime.now(timezone.utc)
 #We apply it using the wrapper function
 df["propagated"] = df.apply(propagate_row, axis = 1)
 
+#graph_positions(df)
+#graph_velocities(df)
+
 df.to_csv("tle_data_propagated.csv", index=False)
+
+
+
 
