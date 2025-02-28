@@ -3,9 +3,9 @@ import pandas as pd
 
 class GetSatelliteData:
     def retrieve_data(self):
-        # Space-track credentials
-        username = 'adam.mouedden@gmail.com'
-        password = 'Adammouedden-2002'
+        # Enter your Space-track credentials
+        username = ''
+        password = ''
 
         # Number of TLE elements to pull
         num_elements = 50
