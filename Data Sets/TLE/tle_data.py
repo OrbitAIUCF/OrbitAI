@@ -4,11 +4,11 @@ import pandas as pd
 class GetSatelliteData:
     def retrieve_data(self):
         # Space-track credentials
-        username = ''
-        password = ''
+        username = 'adam.mouedden@gmail.com'
+        password = 'Adammouedden-2002'
 
         # Number of TLE elements to pull
-        num_elements = 3
+        num_elements = 50
 
         login_url = "https://www.space-track.org/ajaxauth/login"
         tle_url = f"https://www.space-track.org/basicspacedata/query/class/tle/EPOCH/>now-14/orderby/EPOCH desc/limit/{num_elements}/format/tle"

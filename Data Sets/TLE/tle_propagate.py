@@ -8,6 +8,8 @@ from the TLE data set.
 
 Propagation just means predicting the future position of an object.
 '''
+import json
+
 from sgp4.api import Satrec, jday
 from sgp4.api import WGS72
 import pandas as pd
@@ -20,7 +22,7 @@ df = pd.read_csv("tle_data.csv")
 
 
 
-def propagate_orbit(tle1, tle2, start_time, duration=225, step=60):
+def propagate_orbit(tle1, tle2, start_time, duration=90, step=60):
     '''
 
     :param tle1: The first line of the TLE
@@ -154,6 +156,45 @@ def graph_velocities(df):
         plt.grid(True)
         plt.show()
 
+#This function formats the data for model training
+def parse_data(propagated_data):
+    '''Converts a string with propagated state vectors into a numpy array of shape (B, T, F):
+    B is the batch size/index
+    T is the timesteps per sequence (number of propagated step vectors per object)
+    F is the dimension of the features'''
+
+    array = np.array([[sv["position_x"], sv["position_y"], sv["position_z"], sv["velocity_x"], sv["velocity_y"], sv["velocity_z"]] for sv in propagated_data])
+    return array
+
+def data_formatting(df):
+    # Process each row into a list of sequences
+    sequences = [parse_data(row["propagated"]) for i, row in df.iterrows()]
+    # Convert to (B, T, F) NumPy array
+    data_array = np.array(sequences)  # Shape: (B, T, 6)
+
+    '''Formatting the data for model training.'''
+    # Extract NORAD ID (First 5 characters after column 2 in TLE Line 1)
+    df["object_id"] = df["tle_line1"].str.slice(2, 7).str.strip()
+
+    '''Saving the DF as a csv file.'''
+    # Expand the propagated data into separate rows!
+    propagated_df = df.explode("propagated").reset_index(drop=True)
+
+    # Convert dictionaries into separate columns!
+    propagated_df = propagated_df["propagated"].apply(pd.Series)
+
+    # Reattach the object ID so we know which satellite each state vector belongs to
+    propagated_df["object_id"] = df.explode("propagated")["object_id"].reset_index(drop=True)
+
+    # Reorder columns to have 'object_id' first
+    column_order = ["object_id"] + [col for col in propagated_df.columns if col != "object_id"]
+    propagated_df = propagated_df[column_order]
+
+    # Save to CSV
+    propagated_df.to_csv("propagated_orbits.csv", index=False)
+
+    # Save the properly formatted propagated data to a CSV!
+    propagated_df.to_csv("propagated_orbits.csv", index=False)
 
 
 # Get the current UTC time using datetime.now() with timezone set to UTC
@@ -163,10 +204,17 @@ start_time = datetime.now(timezone.utc)
 #We apply it using the wrapper function
 df["propagated"] = df.apply(propagate_row, axis = 1)
 
+#Graphing!
 #graph_positions(df)
 #graph_velocities(df)
 
-df.to_csv("tle_data_propagated.csv", index=False)
+data_formatting(df)
+
+
+
+
+
+
 
 
 
