@@ -22,7 +22,7 @@ df = pd.read_csv("tle_data.csv")
 
 
 
-def propagate_orbit(tle1, tle2, start_time, duration=90, step=60):
+def propagate_orbit(tle1, tle2, start_time, duration=3600, step=60):
     '''
 
     :param tle1: The first line of the TLE
