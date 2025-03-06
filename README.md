@@ -1,6 +1,6 @@
 # OrbitAI: AI-Driven Satellite Collision Prevention Model
 
-![My Image](Diagrams/FunnyDiagram.png)
+![My Image](Diagrams/OrbitAI.png)
 
 **OrbitAI** leverages machine learning to predict potential collisions between satellites and space debris, ensuring the safety and efficiency of space operations. By using real-time data, neural networks, and space simulators, this project aims to enhance satellite autonomy and improve space traffic management.
 
@@ -13,7 +13,7 @@ OrbitAI will rely on a variety of data sources to ensure accurate predictions:
 - **Satellite Orbital Data**: Data on the position, velocity, and trajectory of satellites.
    - Primary source for Satellite data: https://www.space-track.org/
 - **Space Debris Data**: Information from space agencies and tracking stations about debris, including size, velocity, and orbital details.
-   - Primary source of Space Debris data: https://discosweb.esoc.esa.int/
+   - Primary source of Space Debris data: https://celestrak.org/NORAD/elements/
 - **Environmental Factors**: Data on solar radiation, atmospheric drag, and gravitational perturbations that affect satellite paths (May be implemented later).
 
 
