@@ -11,7 +11,7 @@ class GetSatelliteData:
         num_elements = 50
 
         login_url = "https://www.space-track.org/ajaxauth/login"
-        tle_url = f"https://www.space-track.org/basicspacedata/query/class/tle/EPOCH/>now-14/orderby/EPOCH desc/limit/{num_elements}/format/tle"
+        tle_url = f"https://www.space-track.org/basicspacedata/query/class/gp/EPOCH/>now-30/MEAN_MOTION/>11.25/orderby/EPOCH desc/format/3le/limit/{num_elements}"
 
         # Start a session to manage authentication
         session = requests.Session()
