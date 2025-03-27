@@ -1,9 +1,5 @@
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
-import pandas as pd
-from torch.nn.functional import dropout
-from sklearn.preprocessing import StandardScaler
 
 #Hyperparameters:
 '''
@@ -20,19 +16,6 @@ Explanations (as needed):
     
      
 '''
-
-INPUT_DIM = 7          #The dimensions/neurons for the input layer: time, pos_x, pos_y, pos_z, vel_x, vel_y, vel_z
-EMBED_DIM = 128        #Embedding Dimension for input vectors.
-NUM_HEADS = 8          #Number of attention heads in multi-head attention block
-NUM_LAYERS = 6         #Number of encoder layers
-FEED_FORWARD_DIM = 256 #Size of feedforward layers within the Transformer's MLP
-OUTPUT_DIM = 6         #Predicting the 6 dimensional outputs (the next state vectors)
-SEQ_LENGTH = 10        #Length of the input sequences
-LEARNING_RATE = 0.001  #The learning rate for the optimizer function
-BATCH_SIZE = 32        #Number of sequences per batch
-EPOCHS = 50            #Number of training iterations
-DROPOUT = 0.1          #Overfitting prevention
-#Add another parameter, dropout, if experiencing overfitting
 
 '''
 Embedding Layer: Since our input consists of 6 continuous features:
@@ -97,13 +80,10 @@ class TransformerEncoder(nn.Module):
         src: input data, tensor of shape (batch_size, sequence_length, embedding_dimensions)
         returns: (batch_size, sequence_length, embedding_dimension)
         '''
-        #Transpose for the transformer so that sequence_length comes first in the tensor
-        #x = x.transpose(0,1)
 
         #Pass through transformer encoder for prediction
         encoded_data = self.encoder(src)
 
-        #Transpose back to having batch first in the tensor
         return encoded_data
 '''
 Transformer Decoder
@@ -128,15 +108,12 @@ class TransformerDecoder(nn.Module):
         tgt: a typical name for the input sequence being sent into a decoder, short for target
         memory: (batch, src_sequence_length, embed_dim) - this is output from the encoder
         '''
-        #Transpose to match transformer input (seq_len, batch, embed_dim), optional
-        #tgt = tgt.transpose(0,1)
-        #memory = memory.transpose(0,1)
+        tgt = tgt
+        memory = memory
 
         #Decode!
         out = self.decoder(tgt=tgt, memory=memory)
 
-        #Transpose back, optional
-        #out = out.transpose(0,1)
         return out
 '''
 Output Layer
@@ -156,14 +133,15 @@ class OutputProjection(nn.Module):
 OrbitAI Transformer Model
 '''
 class OrbitAI(nn.Module):
-    def __init__(self, input_dim, embed_dim, output_dim, num_heads, feedforward_dim, num_layers, dropout, seq_len):
+    def __init__(self, input_dim, embed_dim, output_dim, num_heads, feedforward_dim, num_layers, dropout, seq_len, pred_len):
         super(OrbitAI, self).__init__()
 
         self.embedding = InputEmbedding(
             input_dim = input_dim,
             embed_dim = embed_dim
             )
-        self.positional_encoding = LearnedPositionalEncoding(seq_len, embed_dim)
+        self.src_encoded = LearnedPositionalEncoding(seq_len, embed_dim)
+        self.tgt_encoded = LearnedPositionalEncoding(pred_len, embed_dim)
 
         self.encoder = TransformerEncoder(
             embed_dim = embed_dim,
@@ -192,10 +170,10 @@ class OrbitAI(nn.Module):
         tgt: [batch_size, tgt_seq_len, input_dim] (from the decoder)
         '''
         src_embedded = self.embedding(src)
-        src_encoded = self.positional_encoding(src_embedded)
+        src_encoded = self.src_encoded(src_embedded)
 
         tgt_embedded = self.embedding(tgt)
-        tgt_encoded = self.positional_encoding(tgt_embedded)
+        tgt_encoded = self.tgt_encoded(tgt_embedded)
 
         #Transformer encoder
         memory = self.encoder(src_encoded)
@@ -207,10 +185,6 @@ class OrbitAI(nn.Module):
         output = self.output_layer(decoded)
 
         return output
-
-
-
-
 
 '''
 Testing the model so far:

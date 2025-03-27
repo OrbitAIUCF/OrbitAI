@@ -9,19 +9,19 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 import time
 
-
 INPUT_DIM = 7          #The dimensions/neurons for the input layer: time, pos_x, pos_y, pos_z, vel_x, vel_y, vel_z
 EMBED_DIM = 128        #Embedding Dimension for input vectors.
 NUM_HEADS = 8          #Number of attention heads in multi-head attention block
-NUM_LAYERS = 8         #Number of encoder layers
-FEED_FORWARD_DIM = 512 #Size of feedforward layers within the Transformer's MLP
+NUM_LAYERS = 6         #Number of encoder layers
+FEED_FORWARD_DIM = 256 #Size of feedforward layers within the Transformer's MLP
 OUTPUT_DIM = 6         #Predicting the 6 dimensional outputs (the next state vectors)
-SEQ_LENGTH = 10        #Length of the input sequences
-LEARNING_RATE = 0.0001  #The learning rate for the optimizer function
+LEARNING_RATE = 0.00001  #The learning rate for the optimizer function
 BATCH_SIZE = 32        #Number of sequences per batch
-EPOCHS = 100            #Number of training iterations
+EPOCHS = 50            #Number of training iterations
 DROPOUT = 0.1          #Overfitting prevention
 #Add another parameter, dropout, if experiencing overfitting
+SEQ_LENGTH = 270        #Length of the input sequences, 270 = 8100/30 = PropagationDuration/steps
+PRED_LEN = 2           #Number of sequences we want outputted
 
 
 def train(model, dataloader, optimizer, criterion, device):
@@ -32,6 +32,7 @@ def train(model, dataloader, optimizer, criterion, device):
         src = batch['src'].to(device)
         tgt = batch['tgt'].to(device)
         tgt_y = batch['tgt_y'].to(device)
+
 
         optimizer.zero_grad()
         output = model(src, tgt)
@@ -45,7 +46,7 @@ def train(model, dataloader, optimizer, criterion, device):
     return total_loss / len(dataloader)
 
 class OrbitDataset(Dataset):
-    def __init__(self, csv_path, input_len = 20, pred_len = 10):
+    def __init__(self, csv_path, input_len = 270, pred_len = 1):
         super().__init__()
         self.input_len = input_len
         self.pred_len = pred_len
@@ -54,7 +55,11 @@ class OrbitDataset(Dataset):
 
         #Keep columns in order
         raw_data = df[['time', 'position_x', 'position_y', 'position_z',
-                                'velocity_x', 'velocity_y', 'velocity_z']].values
+                                'velocity_x', 'velocity_y', 'velocity_z']]
+
+        raw_data = raw_data.dropna().reset_index(drop=True)
+        raw_data = raw_data.values
+        
         #Split time and state data
         self.time = raw_data[:, 0] - raw_data[:, 0].min()/(raw_data[:, 0].max() - raw_data[:, 0].min())
         self.time = self.time.reshape(-1,1) #normalize time
@@ -73,7 +78,7 @@ class OrbitDataset(Dataset):
         return len(self.data) - (self.input_len + self.pred_len) + 1
 
     def __getitem__(self, idx):
-        #Encoder input (10 steps)
+        #Encoder input
         src = self.data[idx : idx + self.input_len]
 
         #Decoder input (use the last state from src then roll forward)
@@ -98,8 +103,6 @@ class OrbitDataset(Dataset):
         #Reverse scaling of predicted state vectors, un-normalized them
         return self.scaler.inverse_transform(prediction)
 
-
-
 '''
 #Sanity check
 batch = next(iter(dataloader))
@@ -114,7 +117,7 @@ print("tgt_y: ", batch['tgt_y'].shape)  # [BATCH_SIZE, 5, 6]
 device = torch.device('cuda')
 
 #Load Dataset
-dataset = OrbitDataset(csv_path = "training_data.csv", input_len = 10, pred_len = 5)
+dataset = OrbitDataset(csv_path = "training_data.csv", input_len = 270, pred_len = 1)
 dataloader = DataLoader(dataset, batch_size=BATCH_SIZE, shuffle=True)
 
 #Instantiate model
@@ -126,7 +129,8 @@ MODEL = OrbitAI(
     feedforward_dim = FEED_FORWARD_DIM,
     num_layers = NUM_LAYERS,
     dropout = DROPOUT,
-    seq_len = SEQ_LENGTH
+    seq_len = SEQ_LENGTH,
+    pred_len = PRED_LEN
 ).to(device)
 
 #Select loss function
@@ -152,18 +156,4 @@ torch.save({
 
 print("Model and Optimizer saved")
 
-# Evaluation
-MODEL.eval()
-with torch.no_grad():
-    sample = dataset[0]
-    src = sample['src'].unsqueeze(0).to(device)    # [1, input_len, 7]
-    tgt = sample['tgt'].unsqueeze(0).to(device)    # [1, pred_len, 7]
-    tgt_y = sample['tgt_y']                        # [pred_len, 6]
-
-    output = MODEL(src, tgt).squeeze(0).cpu().numpy()  # [pred_len, 6]
-    prediction_unscaled = dataset.inverse_transform(output)
-    target_unscaled = dataset.inverse_transform(tgt_y.numpy())
-
-    print("Prediction (unscaled):\n", prediction_unscaled)
-    print("Target (unscaled):\n", target_unscaled)
 
