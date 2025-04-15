@@ -1,12 +1,159 @@
+    # Interactive 3D Satellite Graph Animation with Plotly
+    # Simple 2D & 3D Graphs Using Matplotlib
+    # Purpose: Sequentially visualize satellite interactions over time using a slider
+
 import matplotlib.pyplot as plt
 import networkx as nx
-from datetime import datetime
 from mpl_toolkits.mplot3d import Axes3D
 import random
+import plotly.graph_objects as go
+import numpy as np
 
 # -------------------------------
-# Graph Visualization (2D)
+# Graph Animation Visualization (3D)
 # -------------------------------
+def animate_graph_3d_interactive(graph_list):
+    all_frames = []
+
+    # Establish global axis ranges based on all positions
+    all_positions = np.vstack([g.x[:, :3].numpy() for g in graph_list])
+    buffer = 500  # Extra space to keep axis ranges consistent visually
+    x_min, x_max = np.min(all_positions[:, 0]), np.max(all_positions[:, 0])
+    y_min, y_max = np.min(all_positions[:, 1]), np.max(all_positions[:, 1])
+    z_min, z_max = np.min(all_positions[:, 2]), np.max(all_positions[:, 2])
+    x_range = [x_min - buffer, x_max + buffer]
+    y_range = [y_min - buffer, y_max + buffer]
+    z_range = [z_min - buffer, z_max + buffer]
+
+    for graph in graph_list:
+        positions = graph.x[:, :3].numpy()
+        edge_index = graph.edge_index.t().tolist()
+        sat_ids = graph.sat_ids if hasattr(graph, 'sat_ids') else [str(i) for i in range(len(positions))]
+        timestamp = graph.timestamp if hasattr(graph, 'timestamp') else "T"
+
+        edge_lines = []
+        for (i, j) in edge_index:
+            edge_lines.extend([positions[i], positions[j], [None, None, None]])
+
+        edge_trace = go.Scatter3d(
+            x=[pt[0] for pt in edge_lines],
+            y=[pt[1] for pt in edge_lines],
+            z=[pt[2] for pt in edge_lines],
+            mode='lines',
+            line=dict(color='gray', width=2),
+            showlegend=False
+        )
+
+        node_trace = go.Scatter3d(
+            x=positions[:, 0],
+            y=positions[:, 1],
+            z=positions[:, 2],
+            mode='markers+text',
+            text=sat_ids,
+            textposition="top center",
+            marker=dict(size=5, color='skyblue'),
+            name=str(timestamp)
+        )
+
+        frame = go.Frame(data=[edge_trace, node_trace], name=str(timestamp))
+        all_frames.append(frame)
+
+    # Define default animation frame duration
+    default_duration = 200  # ms
+
+    # Standard Play/Pause and Step Buttons
+    play_button = dict(
+        label="Play",
+        method="animate",
+        args=[None, {
+            "frame": {"duration": default_duration, "redraw": True},
+            "fromcurrent": True,
+            "transition": {"duration": 0}
+        }]
+    )
+    pause_button = dict(
+        label="Pause",
+        method="animate",
+        args=[[None], {
+            "frame": {"duration": 0, "redraw": False},
+            "mode": "immediate"
+        }]
+    )
+    step_forward_button = dict(
+        label="Step Forward",
+        method="animate",
+        args=[[None], {
+            "mode": "immediate",
+            "frame": {"duration": 0, "redraw": True},
+            "transition": {"duration": 0}
+        }]
+    )
+
+    # Faster/Slower Buttons Using relayout (updates frame duration)
+    faster_button = dict(
+        label="Faster",
+        method="relayout",
+        args=[{"frame.duration": 100}]
+    )
+    slower_button = dict(
+        label="Slower",
+        method="relayout",
+        args=[{"frame.duration": 400}]
+    )
+
+    fig = go.Figure(
+        data=all_frames[0].data,
+        frames=all_frames,
+        layout=go.Layout(
+            title="OrbitAI Satellite Interaction Timeline",
+            scene=dict(
+                xaxis_title="X (km)",
+                yaxis_title="Y (km)",
+                zaxis_title="Z (km)",
+                xaxis=dict(range=x_range),
+                yaxis=dict(range=y_range),
+                zaxis=dict(range=z_range),
+                aspectmode="manual",
+                aspectratio=dict(x=1, y=1, z=1)
+            ),
+            updatemenus=[
+                dict(
+                    type="buttons",
+                    showactive=False,
+                    buttons=[
+                        play_button, pause_button, step_forward_button,  # step_backward not natively supported
+                        faster_button, slower_button
+                    ],
+                    x=0.0, y=1.15  # adjust position if needed
+                )
+            ],
+            sliders=[dict(
+                steps=[
+                    dict(method='animate',
+                        args=[[f.name],
+                            dict(mode='immediate',
+                                    frame=dict(duration=0, redraw=True),
+                                    transition=dict(duration=0)
+                            )
+                            ],
+                        label=f.name)
+                    for f in all_frames
+                ],
+                transition=dict(duration=0),
+                x=0, y=0,
+                currentvalue=dict(font=dict(size=14), prefix="Time: ", visible=True),
+                len=1.0
+            )]
+        )
+    )
+
+    fig.show()
+
+
+
+    # -------------------------------
+    # Graph Visualization (2D)
+    # -------------------------------
 def visualize_graph(data):
     G = nx.DiGraph()
     positions = data.x[:, :3].numpy()  # use x, y, z as node positions
