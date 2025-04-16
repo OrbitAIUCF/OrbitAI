@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+from scipy.signal import max_len_seq
 
 #Hyperparameters:
 '''
@@ -28,24 +29,28 @@ class InputEmbedding(nn.Module):
     def __init__(self, input_dim, embed_dim):
         super(InputEmbedding, self).__init__() #initializes the parent module (nn.Module)
         self.linear = nn.Linear(input_dim, embed_dim) #Linear layer to project input into embedding space.
-
+        self.norm = nn.LayerNorm(embed_dim) #4/15/2025 to stabilze the input embeddings and improve convergence
     def forward(self, x):
-        return self.linear(x)
+        return self.norm(self.linear(x))
 
 '''
 Positional Encoding Layer (Based on time stamps)
 '''
 class LearnedPositionalEncoding(nn.Module):
-    def __init__(self, seq_length, embed_dim):
+    def __init__(self, max_len, embed_dim):
         super(LearnedPositionalEncoding, self).__init__()
         #One positional vector per sequence position
-        self.pos_embedding = nn.Parameter(torch.randn(1, seq_length, embed_dim))
+        self.pos_embedding = nn.Parameter(torch.randn(1, max_len, embed_dim))
+        self.max_len = max_len
 
     def forward(self, x):
         '''
         x:Tensor of shape (BATCH_SIZE, SEQ_LENGTH, EMBED_DIM)
         '''
+        #4/15/2025 Make positional encoding always max-safe
         seq_length = x.size(1)
+        if seq_length > self.max_len:
+            raise ValueError(f"Sequence length {seq_length} exceeds maximum value {self.max_len} for positional encoding.")
 
         #By slicing with the following code, we can select embeddings that exactly match the current input sequence length
         x = x + self.pos_embedding[:, :seq_length, :]
@@ -102,32 +107,36 @@ class TransformerDecoder(nn.Module):
 
         self.decoder = nn.TransformerDecoder(decoder_layer, num_layers = num_layers)
 
-    def forward(self, tgt, memory):
+    #4/16/2025 Change #007 Decoder Caching to speed up autoregressive inference, this stops us from recalculating the entire decoder sequence every time
+    def forward(self, tgt, memory, past_cache):
         '''
-
         tgt: a typical name for the input sequence being sent into a decoder, short for target
         memory: (batch, src_sequence_length, embed_dim) - this is output from the encoder
         '''
-        tgt = tgt
-        memory = memory
-
+        if past_cache is not None:
+            #Append current timestep to cache
+            tgt = torch.cat([past_cache, tgt], dim=1)
         #Decode!
         out = self.decoder(tgt=tgt, memory=memory)
 
-        return out
+        return out, tgt #Return updated cache
 '''
 Output Layer
 input shape: [batch_size, sequence_length, embedding_dimensions]
 output shape: [batch_size, sequence_length, 6] for the future state vectors
 '''
 class OutputProjection(nn.Module):
-    def __init__(self, embed_dim, output_dim):
+    def __init__(self, embed_dim):
         super(OutputProjection,self).__init__()
         #Fully connected MLP layer
-        self.fc_out = nn.Linear(embed_dim, output_dim)
+        self.position_head = nn.Linear(embed_dim, 3) #Predict positions
+        #self.velocity_head = nn.Linear(embed_dim, 3) #Predict velocities
 
     def forward(self,x):
-        return self.fc_out(x)
+        position = self.position_head(x)
+        #velocity = self.velocity_head(x)
+        #4/16/2025 Velocity dropped since it is harder to learn
+        return position
 
 '''
 OrbitAI Transformer Model
@@ -140,8 +149,11 @@ class OrbitAI(nn.Module):
             input_dim = input_dim,
             embed_dim = embed_dim
             )
-        self.src_encoded = LearnedPositionalEncoding(seq_len, embed_dim)
-        self.tgt_encoded = LearnedPositionalEncoding(pred_len, embed_dim)
+
+        #4/15/2025 Shared positional encoding
+        max_len = max(seq_len, pred_len + 24) #Covers full encoder input + trimmed decoder steps
+        self.pos_encoding = LearnedPositionalEncoding(max_len = max_len, embed_dim = embed_dim)
+
 
         self.encoder = TransformerEncoder(
             embed_dim = embed_dim,
@@ -159,95 +171,23 @@ class OrbitAI(nn.Module):
             dropout = dropout
         )
 
-        self.output_layer = OutputProjection(
-            embed_dim = embed_dim,
-            output_dim = output_dim
-        )
+        self.output_layer = OutputProjection(embed_dim)
 
-    def forward(self, src, tgt):
+    def forward(self, src, tgt, past_cache=None):
         '''
         src: [batch_size, src_seq_len, input_dim] (from the encoder)
         tgt: [batch_size, tgt_seq_len, input_dim] (from the decoder)
         '''
         src_embedded = self.embedding(src)
-        src_encoded = self.src_encoded(src_embedded)
+        src_encoded = self.pos_encoding(src_embedded)
 
         tgt_embedded = self.embedding(tgt)
-        tgt_encoded = self.tgt_encoded(tgt_embedded)
+        tgt_encoded = self.pos_encoding(tgt_embedded)
 
         #Transformer encoder
         memory = self.encoder(src_encoded)
 
         #Transformer decoder
-        decoded = self.decoder(tgt_encoded, memory)
+        decoded, updated_cache = self.decoder(tgt_encoded, memory, past_cache=past_cache)
 
-        #Project decoder output into state vector predictions
-        output = self.output_layer(decoded)
-
-        return output
-
-'''
-Testing the model so far:
-
-#Get input
-df = pd.read_csv("training_data.csv")
-
-
-#Convert from df to Tensor
-sequence = df[['time',
-               'position_x', 'position_y', 'position_z',
-               'velocity_x', 'velocity_y', 'velocity_z'
-               ]].values
-
-scaler = StandardScaler()
-scaled_data = scaler.fit_transform(sequence)
-# After training, you'll need to use `scaler.inverse_transform` to get physical units again
-
-#Convert to float32 tensor and add batch dimension
-sequence = torch.tensor(sequence,dtype=torch.float32)
-
-input_seq = sequence[:SEQ_LENGTH, :]             #Shape: [10, 7]
-target_state = sequence[SEQ_LENGTH, 1:]          #Shape [6] -> pos and vel, skip the time feature
-
-#Add batch dimension: [1, 10, 7]
-input_seq = input_seq.unsqueeze(0)
-
-#Instantiate the model
-embed_layer = InputEmbedding(INPUT_DIM, EMBED_DIM)
-pos_encoder = LearnedPositionalEncoding(SEQ_LENGTH, EMBED_DIM)
-transformer_encoder = TransformerEncoder(
-    embed_dim = EMBED_DIM,
-    num_heads = NUM_HEADS,
-    feedforward_dim = FEED_FORWARD_DIM,
-    num_layers = NUM_LAYERS,
-    dropout = DROPOUT
-)
-
-#Forward pass through each layer
-x = embed_layer(input_seq)
-x = pos_encoder(x)
-x = transformer_encoder(x)
-print("After transformer Encoder:", x.shape)
-
-#Use the last step of the encoder as decoder input
-tgt = x[:, -1:, :] #[1,1,128]
-
-#Testing the decoder
-decoder = TransformerDecoder(
-    embed_dim=EMBED_DIM,
-    num_heads=NUM_HEADS,
-    feedforward_dim=FEED_FORWARD_DIM,
-    num_layers=NUM_LAYERS,
-    dropout=DROPOUT
-)
-
-memory = transformer_encoder(x) #Shape [1,1,128], this is the output from the encoder
-
-decoder_output = decoder(tgt=tgt, memory=memory) #[1,1,128]
-
-output_layer = nn.Linear(EMBED_DIM, OUTPUT_DIM)
-predicted_state = output_layer(decoder_output) #[1,1,6]
-
-print("Predicted state:", predicted_state)
-print("Target state:", target_state)
-'''
+        return self.output_layer(decoded), updated_cache
