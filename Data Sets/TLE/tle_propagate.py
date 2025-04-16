@@ -8,7 +8,6 @@ from the TLE data set.
 
 Propagation just means predicting the future position of an object.
 '''
-import json
 
 from sgp4.api import Satrec, jday
 from sgp4.api import WGS72
@@ -16,13 +15,15 @@ import pandas as pd
 from datetime import datetime, timedelta, timezone
 import numpy as np
 import matplotlib.pyplot as plt
+import math
 
 #Load the dataframe
 df = pd.read_csv("tle_data.csv")
+df["tle_line1"] = df["tle_line1"].str.strip()
+df["tle_line2"] = df["tle_line2"].str.strip()
 
 
-
-def propagate_orbit(tle1, tle2, start_time, duration=3600, step=60):
+def propagate_orbit(tle1, tle2, start_time, duration=8100, step=30):
     '''
 
     :param tle1: The first line of the TLE
@@ -43,7 +44,7 @@ def propagate_orbit(tle1, tle2, start_time, duration=3600, step=60):
     #Creates a list of timestamps starting from the start time, incremented of "step" seconds until the defined duration.
     #This represents the time points at which the satellite position will be predicted.
     timestamps = []
-    for i in range(0, duration, step):
+    for i in range(0, duration + step, step):
         timestamps.append(start_time + timedelta(seconds=i))
 
     #We will store the positions and velocities at each time step here
@@ -62,6 +63,11 @@ def propagate_orbit(tle1, tle2, start_time, duration=3600, step=60):
         '''
         e, position, velocity = sat.sgp4(julian_date, fraction)
 
+        if any(np.isnan(position)) or any(np.isnan(velocity)):
+            print(f"[SGP4] Bad propagation at {t} for TLE: {tle1.strip()} - skipping")
+            return []
+
+
         if (e == 0):
             #Append the current time stamp, position, and velocity
             results.append({
@@ -73,11 +79,13 @@ def propagate_orbit(tle1, tle2, start_time, duration=3600, step=60):
                 "velocity_y": velocity[1],
                 "velocity_z": velocity[2]
             })
-
-
+        if math.isnan(position[0]) or math.isnan(velocity[0]):
+            print(f"NaN detected at time {t}")
     return results
 
 def propagate_row(row):
+    object_id = row["tle_line1"][2:7]
+    print(f"Propagating satellite {object_id}")
     return propagate_orbit(row["tle_line1"], row["tle_line2"], start_time)
 
 def graph_positions(df):
@@ -166,9 +174,21 @@ def parse_data(propagated_data):
     array = np.array([[sv["position_x"], sv["position_y"], sv["position_z"], sv["velocity_x"], sv["velocity_y"], sv["velocity_z"]] for sv in propagated_data])
     return array
 
-def data_formatting(df):
+def data_formatting(df, duration=8100, steps=30):
     # Process each row into a list of sequences
-    sequences = [parse_data(row["propagated"]) for i, row in df.iterrows()]
+
+    expected_timesteps = int(duration / steps) + 1
+
+    sequences = []
+    #Drop any invalid propagated sequences
+    for i, row in df.iterrows():
+        parsed = parse_data(row["propagated"])
+        if parsed.shape == (expected_timesteps, 6):
+            sequences.append(parsed)
+        else:
+            print(f"Dropping incomplete sequence {i}: shape {parsed.shape}")
+
+
     # Convert to (B, T, F) NumPy array
     data_array = np.array(sequences)  # Shape: (B, T, 6)
 
@@ -193,22 +213,40 @@ def data_formatting(df):
     # Save to CSV
     propagated_df.to_csv("propagated_orbits.csv", index=False)
 
-    # Save the properly formatted propagated data to a CSV!
-    propagated_df.to_csv("propagated_orbits.csv", index=False)
+def save_training_data(df, output_filename="training_data.csv"):
+    '''Saves simplified training data extracted from the "propagated" column.'''
+
+    # Expand the 'propagated' column into separate rows
+    expanded_df = df.explode('propagated').reset_index(drop=True)
+
+    # Expand the dictionary inside 'propagated' into columns
+    propagated_df_expanded = pd.json_normalize(expanded_df['propagated'])
+
+    # Convert timestamp column to datetime
+    propagated_df_expanded['timestamp'] = pd.to_datetime(propagated_df_expanded['timestamp'], utc=True)
+    reference_time = propagated_df_expanded['timestamp'].min()
+
+    # Create a new column "time" (float)
+    propagated_df_expanded['time'] = (propagated_df_expanded['timestamp'] - reference_time).dt.total_seconds()
+
+    # Select required columns
+    training_df = propagated_df_expanded[['time', 'position_x', 'position_y', 'position_z',
+                                          'velocity_x', 'velocity_y', 'velocity_z']]
+
+    # Save the selected columns to CSV
+    training_df.to_csv(output_filename, index=False)
 
 
 # Get the current UTC time using datetime.now() with timezone set to UTC
 start_time = datetime.now(timezone.utc)
 
-#Applies the propagate_orbit function to each row in the dataframe, which is each satellite.
-#We apply it using the wrapper function
-df["propagated"] = df.apply(propagate_row, axis = 1)
-
-#Graphing!
-#graph_positions(df)
-#graph_velocities(df)
+df["propagated"] = df.apply(lambda row: propagate_row(row), axis=1)
 
 data_formatting(df)
+
+print(df.columns)
+save_training_data(df, "../../src/Models/new_training_data.csv")
+
 
 
 
