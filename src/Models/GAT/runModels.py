@@ -1,11 +1,11 @@
-from GATDraftModel import OrbitGNN  # or wherever your model class is
+from GATDraftModel import OrbitGNN
 import modelVisualizer as mv
 import torch
 
 
 # Choose device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print(f"[INFO] Using device: {device}") # Confirm CUDA
+#print(f"[INFO] Using device: {device}") # Confirm CUDA
 
 # Load graph sequence
 graphs = OrbitGNN.build_all_graphs_from_csv("orbits_with_velocity_and_labels.csv")
@@ -15,14 +15,21 @@ model = OrbitGNN(use_edge_embedding=True).to(device)
 model.eval()
 
 # Run forward pass per graph and attach attention weights
+
 for graph in graphs:
+    row = graph.edge_index[0]
+    col = graph.edge_index[1]
+    num_nodes = graph.x.size(0)
+
+    # If valid, move to device
     x = graph.x.to(device)
     edge_index = graph.edge_index.to(device)
     edge_attr = graph.edge_attr.to(device)
 
     with torch.no_grad():
         _ = model(x, edge_index, edge_attr=edge_attr)
-        graph.attn_weights = model.attn_weights.cpu()  # Store for 3D viewer
+        graph.attn_weights = model.attn_weights.cpu()
+
 
 # Visualize in Plotly
 mv.animate_graph_3d_interactive(graphs)

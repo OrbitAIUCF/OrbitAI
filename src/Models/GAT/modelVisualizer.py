@@ -25,27 +25,55 @@ def animate_graph_3d_interactive(graph_list):
     y_range = [y_min - buffer, y_max + buffer]
     z_range = [z_min - buffer, z_max + buffer]
 
+    cmap = plt.get_cmap("plasma")
+
     for graph in graph_list:
         positions = graph.x[:, :3].numpy()
         edge_index = graph.edge_index.t().tolist()
-        sat_ids = graph.sat_ids if hasattr(graph, 'sat_ids') else [str(i) for i in range(len(positions))]
-        timestamp = graph.timestamp if hasattr(graph, 'timestamp') else "T"
+        sat_ids = getattr(graph, 'sat_ids',[str(i) for i in range(len(positions))])
+        timestamp = getattr(graph, 'timestamp', "T")
 
         attn_weights = getattr(graph, 'attn_weights', None)
-        edge_colors = []
         if attn_weights is not None:
+            # 1) pull out the raw attention array [num_edges, heads]
             attn_array = attn_weights.detach().cpu().numpy()
-            norm = (attn_array - attn_array.min()) / (attn_array.max() - attn_array.min() + 1e-8)
-            cmap = plt.get_cmap("plasma")
-            edge_colors = [f"rgba{tuple(int(c*255) for c in cmap(w)[:3]) + (1,)}" for w in norm]
+            # 2) collapse across heads into a single scalar per edge
+            if attn_array.ndim > 1:
+                attn_array = attn_array.mean(axis=1)
+            # 3) normalize to [0,1]
+            norm = (attn_array - attn_array.min()) / \
+                   (attn_array.max() - attn_array.min() + 1e-8)
+
+            # 4) build an rgba color per edge
+            edge_colors = []
+            for w in norm:
+                w_scalar = float(w)
+                r, g, b, _ = cmap(w_scalar)
+                edge_colors.append(
+                    f"rgba({int(r*255)},"
+                    f"{int(g*255)},"
+                    f"{int(b*255)},1)"
+                )
         else:
             edge_colors = ["gray"] * len(edge_index)
 
+        # build the line segments
         edge_lines = []
         edge_color_list = []
         for k, (i, j) in enumerate(edge_index):
-            edge_lines.extend([positions[i], positions[j], [None, None, None]])
-            edge_color_list.extend([edge_colors[k], None])
+            # push the two endpoints, then a break
+            edge_lines.extend([
+                positions[i],
+                positions[j],
+                [None, None, None]
+            ])
+            # color both endpoints the same, then a transparent break
+            edge_color_list.extend([
+                edge_colors[k],
+                edge_colors[k],
+                'rgba(0,0,0,0)'
+            ])
+
 
         edge_trace = go.Scatter3d(
             x=[pt[0] for pt in edge_lines],
@@ -94,9 +122,9 @@ def animate_graph_3d_interactive(graph_list):
     step_forward_button = dict(
         label="Step Forward",
         method="animate",
-        args=[[None], {
+        args=[None, {
             "mode": "immediate",
-            "frame": {"duration": 0, "redraw": True},
+            "frame": {"duration": 1250, "redraw": True},
             "transition": {"duration": 0}
         }]
     )
@@ -104,13 +132,21 @@ def animate_graph_3d_interactive(graph_list):
     # Faster/Slower Buttons Using relayout (updates frame duration)
     faster_button = dict(
         label="Faster",
-        method="relayout",
-        args=[{"frame.duration": 100}]
+        method="animate",
+        args=[None, {
+            "frame": {"duration": default_duration-100, "redraw": True},
+            "fromcurrent": True,
+            "transition": {"duration": 0}
+        }]
     )
     slower_button = dict(
-        label="Slower",
-        method="relayout",
-        args=[{"frame.duration": 400}]
+        label = "Slower",
+        method="animate",
+        args=[None, {
+            "frame": {"duration": default_duration+100, "redraw": True},
+            "fromcurrent": True,
+            "transition": {"duration": 0}
+        }]
     )
 
     fig = go.Figure(

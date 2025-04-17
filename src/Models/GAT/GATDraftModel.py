@@ -40,7 +40,7 @@ class OrbitGNN(nn.Module):
                 nn.ReLU(),
                 nn.Linear(hidden_dim, hidden_dim)
             )
-            self.gat1 = GATConv(in_channels + hidden_dim, hidden_dim, heads=2, concat=True, add_self_loops=False)
+            self.gat1 = GATConv(in_channels, hidden_dim, heads=2, concat=True, add_self_loops=False, edge_dim=hidden_dim)
             self.gat2 = GATConv(hidden_dim * 2, hidden_dim, heads=2, concat=False, add_self_loops=False)
         else:
             self.gat1 = GATConv(in_channels, hidden_dim, heads=2, concat=True, add_self_loops=False)
@@ -55,17 +55,22 @@ class OrbitGNN(nn.Module):
 
     def forward(self, x, edge_index, edge_attr=None):
         if self.use_edge_embedding and edge_attr is not None:
-            edge_embed = self.edge_mlp(edge_attr) # [num_edges, hidden_dim]
-            # Expand node features for each edge
-            row = edge_index[0]
-            x_src = x[row] # sender
-            edge_cat = torch.cat([x_src, edge_embed], dim=1)
-            out, attn = self.gat1((x, x), edge_index, return_attention_weights=True, edge_attr=edge_cat)
-            self.attn_weights = attn[1] # store attention
+            # 1) make your learned edge embedding
+            edge_embed = self.edge_mlp(edge_attr)        # [num_edges, hidden_dim]
+            # 2) pass it straight into GATConv
+            out, (edge_idx, attn_weights) = self.gat1(
+                x,                  # still [num_nodes, in_channels]
+                edge_index,
+                edge_attr=edge_embed,
+                return_attention_weights=True
+            )
+            self.attn_weights = attn_weights            # [num_edges]
             x = out
         else:
-            out, attn = self.gat1(x, edge_index, return_attention_weights=True)
-            self.attnweights = attn[1]
+            out, (edge_idx, attn_weights) = self.gat1(
+                x, edge_index, return_attention_weights=True
+            )
+            self.attn_weights = attn_weights
             x = out
 
         x = nn.functional.relu(x)
