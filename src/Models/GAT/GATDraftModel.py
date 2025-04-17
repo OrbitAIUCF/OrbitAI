@@ -28,11 +28,23 @@ import modelVisualizer as mv
 # 2. GNN Model Definition
 # -------------------------------
 class OrbitGNN(nn.Module):
-    def __init__(self, in_channels=7, hidden_dim=64, num_classes=4):
+    def __init__(self, in_channels=7, hidden_dim=64, num_classes=4, use_edge_embedding=False):
         super(OrbitGNN, self).__init__()
 
-        self.gat1 = GATConv(in_channels, hidden_dim, heads=2, concat=True)
-        self.gat2 = GATConv(hidden_dim * 2, hidden_dim, heads=2, concat=False)
+        self.use_edge_embedding = use_edge_embedding
+        self.attn_weights = None # store attention for visualization
+
+        if use_edge_embedding:
+            self.edge_mlp = nn.Sequential(
+                nn.Linear(2, hidden_dim), # 2 = [distance, relative velocity]
+                nn.ReLU(),
+                nn.Linear(hidden_dim, hidden_dim)
+            )
+            self.gat1 = GATConv(in_channels + hidden_dim, hidden_dim, heads=2, concat=True, add_self_loops=False)
+            self.gat2 = GATConv(hidden_dim * 2, hidden_dim, heads=2, concat=False, add_self_loops=False)
+        else:
+            self.gat1 = GATConv(in_channels, hidden_dim, heads=2, concat=True, add_self_loops=False)
+            self.gat2 = GATConv(hidden_dim * 2, hidden_dim, heads=2, concat=False, add_self_loops=False)
 
         # Maneuver decision head (output: maneuver class per node)
         self.classifier = nn.Sequential(
@@ -41,21 +53,26 @@ class OrbitGNN(nn.Module):
             nn.Linear(hidden_dim, num_classes)  # e.g., 0 = no move, 1 = +x, 2 = -x, 3 = +z
         )
 
-    def forward(self, x, edge_index):
-        x = self.gat1(x, edge_index)
+    def forward(self, x, edge_index, edge_attr=None):
+        if self.use_edge_embedding and edge_attr is not None:
+            edge_embed = self.edge_mlp(edge_attr) # [num_edges, hidden_dim]
+            # Expand node features for each edge
+            row = edge_index[0]
+            x_src = x[row] # sender
+            edge_cat = torch.cat([x_src, edge_embed], dim=1)
+            out, attn = self.gat1((x, x), edge_index, return_attention_weights=True, edge_attr=edge_cat)
+            self.attn_weights = attn[1] # store attention
+            x = out
+        else:
+            out, attn = self.gat1(x, edge_index, return_attention_weights=True)
+            self.attnweights = attn[1]
+            x = out
+
         x = nn.functional.relu(x)
         x = self.gat2(x, edge_index)
         return self.classifier(x)
 
-    # -------------------------------
-    # 3. Graph Construction Logic
-    # -------------------------------
-    # (To be implemented with a separate utility)
-    # - Compute edges where distance(position_i - position_j) < proximity_threshold
-    # - For each edge, optionally compute attention weight from relative velocity
-    # - Encode edge weights if needed (for attention override)
-
-    def build_graph_from_csv(csv_path, timestamp_str, proximity_threshold=10000.0):
+    def build_graph_from_csv(csv_path, timestamp_str, proximity_threshold=7000.0):
         df = pd.read_csv(csv_path)
         df["timestamp"] = pd.to_datetime(df["timestamp"])
 
@@ -76,21 +93,24 @@ class OrbitGNN(nn.Module):
         node_features["time"] = timestamp.timestamp()  # add scalar time as final feature
         x = torch.tensor(node_features.values, dtype=torch.float32)
 
-        # Compute edge_index and edge attributes (distance)
+        # Compute edge_index and edge attributes (distance, relative velocity)
         positions = snapshot[["position_x", "position_y", "position_z"]].values
+        velocities = snapshot[["velocity_x", "velocity_y", "velocity_z"]].values
+
         edge_index = [] #Compresssed form of an adjacency matrix.
-        edge_distances = []
+        edge_features = []
         num_nodes = len(positions)
         for i in range(num_nodes):
             for j in range(num_nodes):
                 if i != j:
                     dist = np.linalg.norm(positions[i] - positions[j])
                     if dist < proximity_threshold:
+                        rel_vel = np.linalg.norm(velocities[i] - velocities[j])
                         edge_index.append([i, j])
-                        edge_distances.append(dist)
+                        edge_features.append([dist, rel_vel])
 
         edge_index = torch.tensor(edge_index, dtype=torch.long).t().contiguous()
-        edge_attr = torch.tensor(edge_distances, dtype=torch.float32) #Stores the edge_distances for potential use in GAT attention weights
+        edge_attr = torch.tensor(edge_features, dtype=torch.float32) #Stores the edge_distances & edge_velocities for use in GAT attention weights
 
         # Labels (maneuver class)
         y = torch.tensor(snapshot["maneuver_label"].values, dtype=torch.long)
@@ -115,19 +135,22 @@ class OrbitGNN(nn.Module):
             x = torch.tensor(node_features.values, dtype=torch.float32)
 
             positions = snapshot[["position_x", "position_y", "position_z"]].values
+            velocities = snapshot[["velocity_x", "velocity_y", "velocity_z"]].values
+
             edge_index = []
-            edge_distances = []
+            edge_features = []
             num_nodes = len(positions)
             for i in range(num_nodes):
                 for j in range(num_nodes):
                     if i != j:
                         dist = np.linalg.norm(positions[i] - positions[j])
                         if dist < proximity_threshold:
+                            rel_vel = np.linalg.norm(velocities[i] - velocities[j])
                             edge_index.append([i, j])
-                            edge_distances.append(dist)
+                            edge_features.append([dist, rel_vel])
 
             edge_index = torch.tensor(edge_index, dtype=torch.long).t().contiguous()
-            edge_attr = torch.tensor(edge_distances, dtype=torch.float32)
+            edge_attr = torch.tensor(edge_features, dtype=torch.float32)
             y = torch.tensor(snapshot["maneuver_label"].values, dtype=torch.long)
 
             graph = Data(x=x, edge_index=edge_index, edge_attr=edge_attr, y=y,
@@ -136,17 +159,6 @@ class OrbitGNN(nn.Module):
             graph_list.append(graph)
 
         return graph_list
-
-    #Run Visualization Model#
-    
-    #Ineractive 3D
-    graphs = build_all_graphs_from_csv("orbits_with_velocity_and_labels.csv")
-    mv.animate_graph_3d_interactive(graphs)
-
-    #Basic 3D & 2D
-    # graph = build_graph_from_csv("orbits_with_velocity_and_labels.csv","2025-04-15 16:25:32.375956+00:00")
-    # mv.visualize_graph(graph)
-    # mv.visualize_graph_3d(graph)
 
 # -------------------------------
 # 4. Loss and Training Strategy

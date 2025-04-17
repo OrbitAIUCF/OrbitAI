@@ -31,16 +31,28 @@ def animate_graph_3d_interactive(graph_list):
         sat_ids = graph.sat_ids if hasattr(graph, 'sat_ids') else [str(i) for i in range(len(positions))]
         timestamp = graph.timestamp if hasattr(graph, 'timestamp') else "T"
 
+        attn_weights = getattr(graph, 'attn_weights', None)
+        edge_colors = []
+        if attn_weights is not None:
+            attn_array = attn_weights.detach().cpu().numpy()
+            norm = (attn_array - attn_array.min()) / (attn_array.max() - attn_array.min() + 1e-8)
+            cmap = plt.get_cmap("plasma")
+            edge_colors = [f"rgba{tuple(int(c*255) for c in cmap(w)[:3]) + (1,)}" for w in norm]
+        else:
+            edge_colors = ["gray"] * len(edge_index)
+
         edge_lines = []
-        for (i, j) in edge_index:
+        edge_color_list = []
+        for k, (i, j) in enumerate(edge_index):
             edge_lines.extend([positions[i], positions[j], [None, None, None]])
+            edge_color_list.extend([edge_colors[k], None])
 
         edge_trace = go.Scatter3d(
             x=[pt[0] for pt in edge_lines],
             y=[pt[1] for pt in edge_lines],
             z=[pt[2] for pt in edge_lines],
             mode='lines',
-            line=dict(color='gray', width=2),
+            line=dict(color=edge_color_list, width=3),
             showlegend=False
         )
 
@@ -59,7 +71,7 @@ def animate_graph_3d_interactive(graph_list):
         all_frames.append(frame)
 
     # Define default animation frame duration
-    default_duration = 200  # ms
+    default_duration = 350  # ms
 
     # Standard Play/Pause and Step Buttons
     play_button = dict(
@@ -151,9 +163,9 @@ def animate_graph_3d_interactive(graph_list):
 
 
 
-    # -------------------------------
-    # Graph Visualization (2D)
-    # -------------------------------
+# -------------------------------
+# Graph Visualization (2D)
+# -------------------------------
 def visualize_graph(data):
     G = nx.DiGraph()
     positions = data.x[:, :3].numpy()  # use x, y, z as node positions
