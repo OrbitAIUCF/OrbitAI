@@ -23,8 +23,8 @@ OrbitAI will rely on a variety of data sources to ensure accurate predictions:
 
 To achieve accurate predictions, several types of neural networks will be employed:
 
-- **Recurrent Neural Networks (RNNs)**: For handling time-series data and predicting satellite trajectories over time based on past movement.
-- **Long Short Term Memory Model (LSTM)**: For handling the vanishing/exploding gradient problem that traditional RNNs face.
+- **Gated Recurrent Neural Networks (GRU)**: For handling time-series data and predicting satellite trajectories over time based on past movement.
+- **Transformer Neural Network**: An upgrade to the GRU which better handles simultaneous sequential data processing.
 - **Graph Neural Networks (GNNs)**: For modeling relationships between multiple satellites in a constellation, facilitating coordination (May be implemented later).
 
 
