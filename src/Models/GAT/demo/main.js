@@ -267,7 +267,9 @@ function updateTable(edges) {
     // 3) build rows
     const tbody = document.querySelector('#riskTable tbody');
     tbody.innerHTML = '';
+    console.log("New set of Edges")
     edges.forEach(e => {
+      console.log(e)
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td>${e.source}</td>
