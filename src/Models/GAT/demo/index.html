@@ -1,18 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>…</head>
+<head>
+    <meta charset="UTF-8">
+    <title>OrbitAI Demo</title>
+    <style>
+        .overlay {
+          position: absolute;
+          z-index: 10;
+          color: white;
+          font-family: sans-serif;
+        }
+        #controls {
+          top: 10px; left: 10px;
+          background: rgba(0,0,0,0.5);
+          padding: 8px;
+          border-radius: 4px;
+        }
+        #timeLabel {
+          top: 10px; right: 10px;
+          background: rgba(0,0,0,0.5);
+          padding: 6px;
+          border-radius: 4px;
+        }
+        #riskTable {
+          bottom: 10px; right: 10px;
+          max-height: 40vh;
+          overflow-y: auto;
+          background: rgba(0,0,0,0.7);
+          padding: 6px;
+          border-radius: 4px;
+        }
+        #riskTable table {
+          border-collapse: collapse;
+          width: 100%;
+        }
+        #riskTable th, #riskTable td {
+          padding: 4px 6px;
+          border: 1px solid #444;
+          text-align: center;
+        }
+      </style>           
+</head>
 <body>
-  <div id="infoTable">Loading…</div>
+    <header>
+        <img src="OrbitAI.png" alt="OrbitAI" height="40">
+        <h1>GNN Showcase | Satellite Interaction Timeline</h1>
+    </header>
 
-  <!-- tell the browser what "three" means -->
-  <script type="importmap">
-  {
-    "imports": {
-      "three":   "https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js"
-    }
-  }
-  </script>
-
-  <script type="module" src="./main.js"></script>
-</body>
+    <!-- Overlay panels -->
+    <div id="controls" class="overlay">
+      <button id="playBtn">Play</button>
+      <button id="pauseBtn">Pause</button>
+      <button id="resetCam">Reset View</button>
+      Speed:
+      <button id="fasterBtn">➕</button>
+      <button id="slowerBtn">➖</button>
+    </div>
+    <div id="timeLabel" class="overlay"></div>
+    <div id="riskTable" class="overlay">
+      <table>
+        <thead>
+          <tr>
+            <th>Source</th>
+            <th>Distance (km)</th>
+            <th>RelVel (m/s)</th>
+            <th>Risk</th>
+            <th>Target</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <!-- Your canvas and script -->
+    <script type="importmap">
+        {
+          "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js"
+          }
+        }
+    </script>
+    <script type="module" src="./main.js"></script>
+  </body>
 </html>
