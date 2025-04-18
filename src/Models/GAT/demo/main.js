@@ -211,53 +211,56 @@ function buildStage() {
 }
 
 function updateStage(frame) {
-    // 1) update the HTML overlays
-    document.getElementById('timeLabel').textContent = formatTime(frame.timestamp);
-    updateTable(frame.edges);
-
-    // 2) then move satellites & edges…
-    frame.nodes.forEach((n,i) => {
-        satellites[i].position.set(n.x, n.y, n.z);
-    });
-
-    // Update and color edges
+    // grab the buffers for this frame
     const posAttr   = edgeLines.geometry.getAttribute('position');
     const colorAttr = edgeLines.geometry.getAttribute('color');
-
-    let idx = 0;
-    let cidx = 0;
-
-    frame.edges.forEach(e => {
-        const s = satellites[e.source].position;
-        const t = satellites[e.target].position;
-
-        // Position
-        posAttr.array[idx++] = s.x; posAttr.array[idx++] = s.y; posAttr.array[idx++] = s.z;
-        posAttr.array[idx++] = t.x; posAttr.array[idx++] = t.y; posAttr.array[idx++] = t.z;
-
-        // Color (same color for both vertices of this line)
-        const c = new THREE.Color();
-        c.setHSL((1 - e.attention) * 0.33, 1, 0.5);
-        colorAttr.array[cidx++] = c.r;
-        colorAttr.array[cidx++] = c.g;
-        colorAttr.array[cidx++] = c.b;
-        colorAttr.array[cidx++] = c.r;
-        colorAttr.array[cidx++] = c.g;
-        colorAttr.array[cidx++] = c.b;
+  
+    // 1) update your HTML overlays
+    document.getElementById('timeLabel').textContent = formatTime(frame.timestamp);
+    updateTable(frame.edges);
+  
+    // 2) move satellites…
+    frame.nodes.forEach((n,i) => {
+      satellites[i].position.set(n.x, n.y, n.z);
     });
-
-    for (; idx < posAttr.array.length; idx++) {
-        posAttr.array[idx] = 0;
-    }
-    for (; cidx < colorAttr.array.length; cidx++) {
-        colorAttr.array[cidx] = 0;
-    }
-
+  
+    // 3) now you can safely iterate frame.edges and write into posAttr.array & colorAttr.array
+    let idx = 0, cidx = 0;
+    frame.edges.forEach(e => {
+      const s = satellites[e.source].position;
+      const t = satellites[e.target].position;
+  
+      // positions
+      posAttr.array[idx++] = s.x;
+      posAttr.array[idx++] = s.y;
+      posAttr.array[idx++] = s.z;
+      posAttr.array[idx++] = t.x;
+      posAttr.array[idx++] = t.y;
+      posAttr.array[idx++] = t.z;
+  
+      // discrete bright color
+      let c;
+      if      (e.attention > 0.66) c = new THREE.Color(0xff0000);  // red
+      else if (e.attention > 0.33) c = new THREE.Color(0xffff00);  // yellow
+      else                          c = new THREE.Color(0x00ff00);  // green
+  
+      // both verts same color
+      colorAttr.array[cidx++] = c.r;
+      colorAttr.array[cidx++] = c.g;
+      colorAttr.array[cidx++] = c.b;
+      colorAttr.array[cidx++] = c.r;
+      colorAttr.array[cidx++] = c.g;
+      colorAttr.array[cidx++] = c.b;
+    });
+  
+    // zero out any unused slots
+    for (; idx   < posAttr.array.length;   idx++)   posAttr.array[idx]   = 0;
+    for (; cidx  < colorAttr.array.length; cidx++)  colorAttr.array[cidx] = 0;
   
     posAttr.needsUpdate   = true;
     colorAttr.needsUpdate = true;
-
-}
+  }
+  
     // Update and color edges
     /*
     const posAttr = edgeLines.geometry.getAttribute('position');
