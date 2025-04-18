@@ -69,6 +69,75 @@ async function loadFrames() {
     }
 }
 
+// AXIS TICKS 
+function addAxisTicks() {
+    const step       = 2000;     // tick spacing  (km → world units)
+  const minVal     = -7000;
+  const maxVal     =  7000;
+  const tickSize   = 200;      // length of the little tick mark (world units)
+  const labelGap   = 300;      // distance the number sits away from the axis
+
+  /* build one thin line segment */
+  function makeTick(p1, p2, color) {
+    const g = new THREE.BufferGeometry().setFromPoints([p1, p2]);
+    const m = new THREE.LineBasicMaterial({ color });
+    scene.add(new THREE.Line(g, m));
+  }
+
+  /* build the numeric text label */
+  function makeTickLabel(text, pos) {
+    const el       = document.createElement('div');
+    el.className   = 'tickLabel';
+    el.textContent = text;
+    const label    = new CSS2DObject(el);
+    label.position.copy(pos);
+    scene.add(label);
+  }
+
+  /* ---------- X‑axis ---------- */
+  for (let v = minVal; v <= maxVal; v += step) {
+    const base  = new THREE.Vector3(v, -7000, -7000);
+    const up    = new THREE.Vector3(0, 1, 0).setLength(tickSize / 2);
+    makeTick(base.clone().sub(up), base.clone().add(up), 0xff0000);
+    makeTickLabel(v, base.clone().sub(up).sub(new THREE.Vector3(0, labelGap, 0)));
+  }
+  // extra 0‑km tick if it wasn’t reached by the loop
+  if ((0 - minVal) % step !== 0) {
+    const base0 = new THREE.Vector3(0, -7000, -7000);
+    const up0   = new THREE.Vector3(0, 1, 0).setLength(tickSize / 2);
+    makeTick(base0.clone().sub(up0), base0.clone().add(up0), 0xff0000);
+    makeTickLabel(0, base0.clone().sub(up0).sub(new THREE.Vector3(0, labelGap, 0)));
+  }
+
+  /* ---------- Y‑axis ---------- */
+  for (let v = minVal + step; v <= maxVal; v += step) {   // <‑ skip −7000
+    const base  = new THREE.Vector3(-7000, v, -7000);
+    const right = new THREE.Vector3(1, 0, 0).setLength(tickSize / 2);
+    makeTick(base.clone().sub(right), base.clone().add(right), 0x00ff00);
+    makeTickLabel(v, base.clone().sub(right).sub(new THREE.Vector3(labelGap, 0, 0)));
+  }
+  // explicit 0‑km tick
+  const baseY0 = new THREE.Vector3(-7000, 0, -7000);
+  const right0 = new THREE.Vector3(1, 0, 0).setLength(tickSize / 2);
+  makeTick(baseY0.clone().sub(right0), baseY0.clone().add(right0), 0x00ff00);
+  makeTickLabel(0, baseY0.clone().sub(right0).sub(new THREE.Vector3(labelGap, 0, 0)));
+
+  /* ---------- Z‑axis ---------- */
+  for (let v = minVal; v <= maxVal; v += step) {
+    const base  = new THREE.Vector3(-7000, -7000, v);
+    const up    = new THREE.Vector3(0, 1, 0).setLength(tickSize / 2);
+    makeTick(base.clone().sub(up), base.clone().add(up), 0x0000ff);
+    makeTickLabel(v, base.clone().sub(up).sub(new THREE.Vector3(0, labelGap, 0)));
+  }
+  // extra 0‑km tick for Z
+  if ((0 - minVal) % step !== 0) {
+    const baseZ0 = new THREE.Vector3(-7000, -7000, 0);
+    const upZ0   = new THREE.Vector3(0, 1, 0).setLength(tickSize / 2);
+    makeTick(baseZ0.clone().sub(upZ0), baseZ0.clone().add(upZ0), 0x0000ff);
+    makeTickLabel(0, baseZ0.clone().sub(upZ0).sub(new THREE.Vector3(0, labelGap, 0)));
+  }
+}
+  
 function init() {
     // Scene & background
     scene = new THREE.Scene();
@@ -141,24 +210,25 @@ function init() {
           arrowDir:  new THREE.Vector3(1,0,0),
           labelPos:  new THREE.Vector3( 7200,  -7200,  -7200),
           color:     0xff0000,
-          name:      'X',
+          name:      'X (km)',
         },
         {
           // Y‐axis
           arrowDir:  new THREE.Vector3(0,1,0),
           labelPos:  new THREE.Vector3( -7200,  7200,  -7200),
           color:     0x00ff00,
-          name:      'Y',
+          name:      'Y (km)',
         },
         {
           // Z‐axis
           arrowDir:  new THREE.Vector3(0,0,1),
-          labelPos:  new THREE.Vector3( -7200,  -7200,  7200),
+          labelPos:  new THREE.Vector3( -7200,  -7200,  7500),
           color:     0x0000ff,
-          name:      'Z',
+          name:      'Z (km)',
         },
       ];
       
+      const OFFSET = 1350   // push label 750 wu beyond the arrow tip
       axes.forEach(axis=>{
         // ——— ArrowHelper ———
         const origin = new THREE.Vector3(-7000, -7000, -7000);
@@ -172,6 +242,7 @@ function init() {
         );
         scene.add(arrow);
       
+        addAxisTicks();
         // ——— CSS2D label ———
         const div = document.createElement('div');
         div.className   = 'axisLabel';
@@ -181,15 +252,20 @@ function init() {
         div.style.fontSize  = '24px';
         div.style.fontWeight= 'bold';
         div.style.pointerEvents = 'none';
-        const label = new CSS2DObject(div);
-        label.position.copy(axis.labelPos);
+        
+        const endPoint = origin.clone().add(axis.arrowDir.clone().multiplyScalar(14000 + OFFSET)); //arrow tip
+        const label    = new CSS2DObject(div);
+        label.position.copy(endPoint).addScaledVector(axis.arrowDir, 250);           // 250 wu past tip
         scene.add(label);
-      });      
+       });      
 }
 
 function buildStage() {
     const sphereGeo = new THREE.SphereGeometry(200, 12, 12);
     const mat       = new THREE.MeshBasicMaterial();
+    const SPHERE_R   = 200;          // radius used in your SphereGeometry
+    const LABEL_GAP  = 200;           // world‑unit gap above the sphere
+
     frames[0].nodes.forEach(n => {
         const mesh = new THREE.Mesh(sphereGeo, mat.clone());
         scene.add(mesh);
@@ -199,14 +275,14 @@ function buildStage() {
         div.className = 'label';
         div.textContent = n.id;    // e.g. the sat_id or index
         
-        div.style.marginTop = '-1em';
-        const label = new CSS2DObject(div);
-        mesh.add(label);
+        //div.style.marginTop = '-1em';
+        const label2d  = new CSS2DObject(div);
+        label2d.position.set(0, SPHERE_R + LABEL_GAP, 0);
+        mesh.add(label2d);
 
         satellites.push(mesh);
     });
 
-    
     //const maxEdges = frames[0].edges.length;
     const maxEdges = Math.max(...frames.map(f => f.edges.length));
 
