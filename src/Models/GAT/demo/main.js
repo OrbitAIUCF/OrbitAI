@@ -193,11 +193,17 @@ function buildStage() {
         satellites.push(mesh);
     });
 
+    
     const maxEdges = frames[0].edges.length;
     const edgeGeo  = new THREE.BufferGeometry();
     const positions = new Float32Array(maxEdges * 2 * 3);
     edgeGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    edgeLines = new THREE.LineSegments(edgeGeo, new THREE.LineBasicMaterial());
+    const colors = new Float32Array(maxEdges * 2 * 3);  // 2 vertices per edge, 3 floats per color (r,g,b)
+    edgeGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+    //edgeLines = new THREE.LineSegments(edgeGeo, new THREE.LineBasicMaterial());
+    edgeLines = new THREE.LineSegments(edgeGeo, new THREE.LineBasicMaterial({ vertexColors: true }));
+
     scene.add(edgeLines);
 }
 
@@ -212,6 +218,37 @@ function updateStage(frame) {
     });
 
     // Update and color edges
+    const posAttr   = edgeLines.geometry.getAttribute('position');
+    const colorAttr = edgeLines.geometry.getAttribute('color');
+
+    let idx = 0;
+    let cidx = 0;
+
+    frame.edges.forEach(e => {
+        const s = satellites[e.source].position;
+        const t = satellites[e.target].position;
+
+        // Position
+        posAttr.array[idx++] = s.x; posAttr.array[idx++] = s.y; posAttr.array[idx++] = s.z;
+        posAttr.array[idx++] = t.x; posAttr.array[idx++] = t.y; posAttr.array[idx++] = t.z;
+
+        // Color (same color for both vertices of this line)
+        const c = new THREE.Color();
+        c.setHSL((1 - e.attention) * 0.33, 1, 0.5);
+        colorAttr.array[cidx++] = c.r;
+        colorAttr.array[cidx++] = c.g;
+        colorAttr.array[cidx++] = c.b;
+        colorAttr.array[cidx++] = c.r;
+        colorAttr.array[cidx++] = c.g;
+        colorAttr.array[cidx++] = c.b;
+    });
+
+    posAttr.needsUpdate   = true;
+    colorAttr.needsUpdate = true;
+
+
+    // Update and color edges
+    /*
     const posAttr = edgeLines.geometry.getAttribute('position');
     let idx = 0;
     frame.edges.forEach(e => {
@@ -226,6 +263,7 @@ function updateStage(frame) {
         posAttr.array[idx++] = t.x; posAttr.array[idx++] = t.y; posAttr.array[idx++] = t.z;
     });
     posAttr.needsUpdate = true;
+    */
 
     // Update info panel (first edge as example)
     const e = frame.edges[0];
