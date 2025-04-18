@@ -186,6 +186,7 @@ function buildStage() {
         const div = document.createElement('div');
         div.className = 'label';
         div.textContent = n.id;    // e.g. the sat_id or index
+        
         div.style.marginTop = '-1em';
         const label = new CSS2DObject(div);
         mesh.add(label);
@@ -226,15 +227,6 @@ function updateStage(frame) {
         posAttr.array[idx++] = t.x; posAttr.array[idx++] = t.y; posAttr.array[idx++] = t.z;
     });
     posAttr.needsUpdate = true;
-
-    // Update info panel (first edge as example)
-    const e = frame.edges[0];
-    infoEl.innerHTML = `
-        Pair: ${e.source}–${e.target}<br>
-        Dist: ${e.distance.toFixed(1)}<br>
-        RelVel: ${e.rel_vel.toFixed(1)}<br>
-        Risk: ${(e.attention * 100).toFixed(0)}%
-    `;
 }
 
 function formatTime(ts){
@@ -272,13 +264,13 @@ function updateTable(edges) {
       console.log(e)
       const tr = document.createElement('tr');
       tr.innerHTML = `
-        <td>${e.source}</td>
+        <td>${Number(e.source)+1}</td>
         <td>${e.distance.toFixed(1)}</td>
         <td>${e.rel_vel.toFixed(1)}</td>
         <td style="color:${riskColor(e.attention)}">
           ${riskLabel(e.attention)}
         </td>
-        <td>${e.target}</td>
+        <td>${Number(e.target)+1}</td>
       `;
       tbody.appendChild(tr);
     });
