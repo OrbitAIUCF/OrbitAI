@@ -75,4 +75,4 @@ df_out = pd.DataFrame({
     'position_z': future_xyz[:, 2]
 })
 
-df_out.to_csv("gru_orbit_predictions_with_time.csv", index=False)
+df_out.to_csv(f"gru_orbit_predictions_with_time.csv_{test_id}", index=False)
