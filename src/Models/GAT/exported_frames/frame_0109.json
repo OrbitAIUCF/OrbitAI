@@ -38,70 +38,70 @@
       "target": 1,
       "distance": 6238.63916015625,
       "rel_vel": 9.169254302978516,
-      "attention": 0.6435063481330872
+      "attention": 0.46525952219963074
     },
     {
       "source": 0,
       "target": 4,
       "distance": 6535.607421875,
       "rel_vel": 6.939020156860352,
-      "attention": 0.48059898614883423
+      "attention": 0.34251323342323303
     },
     {
       "source": 1,
       "target": 0,
       "distance": 6238.63916015625,
       "rel_vel": 9.169254302978516,
-      "attention": 0.6435063481330872
+      "attention": 0.46525952219963074
     },
     {
       "source": 1,
       "target": 2,
       "distance": 1694.89501953125,
       "rel_vel": 3.086968421936035,
-      "attention": 0.5051479339599609
+      "attention": 0.5893893241882324
     },
     {
       "source": 1,
       "target": 3,
       "distance": 6366.8076171875,
       "rel_vel": 7.245163917541504,
-      "attention": 0.510277509689331
+      "attention": 0.37033700942993164
     },
     {
       "source": 2,
       "target": 1,
       "distance": 1694.89501953125,
       "rel_vel": 3.086968421936035,
-      "attention": 0.5051479339599609
+      "attention": 0.5893893241882324
     },
     {
       "source": 3,
       "target": 1,
       "distance": 6366.8076171875,
       "rel_vel": 7.245163917541504,
-      "attention": 0.510277509689331
+      "attention": 0.37033700942993164
     },
     {
       "source": 3,
       "target": 4,
       "distance": 2606.440673828125,
       "rel_vel": 2.63014817237854,
-      "attention": 0.4231671094894409
+      "attention": 0.49132853746414185
     },
     {
       "source": 4,
       "target": 0,
       "distance": 6535.607421875,
       "rel_vel": 6.939020156860352,
-      "attention": 0.48059898614883423
+      "attention": 0.34251323342323303
     },
     {
       "source": 4,
       "target": 3,
       "distance": 2606.440673828125,
       "rel_vel": 2.63014817237854,
-      "attention": 0.4231671094894409
+      "attention": 0.49132853746414185
     }
   ]
 }

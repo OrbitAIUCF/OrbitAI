@@ -38,70 +38,70 @@
       "target": 1,
       "distance": 2004.7728271484375,
       "rel_vel": 11.147200584411621,
-      "attention": 0.8854415416717529
+      "attention": 0.8281623125076294
     },
     {
       "source": 0,
       "target": 2,
       "distance": 4992.78271484375,
       "rel_vel": 10.522918701171875,
-      "attention": 0.681096076965332
+      "attention": 0.5496457815170288
     },
     {
       "source": 0,
       "target": 4,
       "distance": 6563.1796875,
       "rel_vel": 8.893918991088867,
-      "attention": 0.5036779046058655
+      "attention": 0.356586217880249
     },
     {
       "source": 1,
       "target": 0,
       "distance": 2004.7728271484375,
       "rel_vel": 11.147200584411621,
-      "attention": 0.8854415416717529
+      "attention": 0.8281623125076294
     },
     {
       "source": 1,
       "target": 2,
       "distance": 3125.3291015625,
       "rel_vel": 2.3073248863220215,
-      "attention": 0.3456019163131714
+      "attention": 0.4149094223976135
     },
     {
       "source": 2,
       "target": 0,
       "distance": 4992.78271484375,
       "rel_vel": 10.522918701171875,
-      "attention": 0.681096076965332
+      "attention": 0.5496457815170288
     },
     {
       "source": 2,
       "target": 1,
       "distance": 3125.3291015625,
       "rel_vel": 2.3073248863220215,
-      "attention": 0.3456019163131714
+      "attention": 0.4149094223976135
     },
     {
       "source": 3,
       "target": 4,
       "distance": 3106.01025390625,
       "rel_vel": 1.8274575471878052,
-      "attention": 0.32087692618370056
+      "attention": 0.3993460536003113
     },
     {
       "source": 4,
       "target": 0,
       "distance": 6563.1796875,
       "rel_vel": 8.893918991088867,
-      "attention": 0.5036779046058655
+      "attention": 0.356586217880249
     },
     {
       "source": 4,
       "target": 3,
       "distance": 3106.01025390625,
       "rel_vel": 1.8274575471878052,
-      "attention": 0.32087692618370056
+      "attention": 0.3993460536003113
     }
   ]
 }

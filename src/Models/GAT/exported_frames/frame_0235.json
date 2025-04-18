@@ -38,140 +38,140 @@
       "target": 1,
       "distance": 1731.968505859375,
       "rel_vel": 10.944229125976562,
-      "attention": 0.901030421257019
+      "attention": 0.8515455722808838
     },
     {
       "source": 0,
       "target": 2,
       "distance": 2546.617431640625,
       "rel_vel": 9.790709495544434,
-      "attention": 0.7912391424179077
+      "attention": 0.7395585775375366
     },
     {
       "source": 0,
       "target": 3,
       "distance": 1805.9842529296875,
       "rel_vel": 8.776299476623535,
-      "attention": 0.7779476642608643
+      "attention": 0.7659658193588257
     },
     {
       "source": 0,
       "target": 4,
       "distance": 2983.199462890625,
       "rel_vel": 7.373861312866211,
-      "attention": 0.6337917447090149
+      "attention": 0.613804042339325
     },
     {
       "source": 1,
       "target": 0,
       "distance": 1731.968505859375,
       "rel_vel": 10.944229125976562,
-      "attention": 0.901030421257019
+      "attention": 0.8515455722808838
     },
     {
       "source": 1,
       "target": 2,
       "distance": 2780.065185546875,
       "rel_vel": 1.5976518392562866,
-      "attention": 0.3287278413772583
+      "attention": 0.42010119557380676
     },
     {
       "source": 1,
       "target": 3,
       "distance": 3339.6328125,
       "rel_vel": 4.584518909454346,
-      "attention": 0.46050286293029785
+      "attention": 0.4813051223754883
     },
     {
       "source": 1,
       "target": 4,
       "distance": 2729.4765625,
       "rel_vel": 5.934384822845459,
-      "attention": 0.5693731307983398
+      "attention": 0.5829403400421143
     },
     {
       "source": 2,
       "target": 0,
       "distance": 2546.617431640625,
       "rel_vel": 9.790709495544434,
-      "attention": 0.7912391424179077
+      "attention": 0.7395585775375366
     },
     {
       "source": 2,
       "target": 1,
       "distance": 2780.065185546875,
       "rel_vel": 1.5976518392562866,
-      "attention": 0.3287278413772583
+      "attention": 0.42010119557380676
     },
     {
       "source": 2,
       "target": 3,
       "distance": 3958.936279296875,
       "rel_vel": 4.082160472869873,
-      "attention": 0.3975730538368225
+      "attention": 0.4098612666130066
     },
     {
       "source": 2,
       "target": 4,
       "distance": 5130.4208984375,
       "rel_vel": 5.106207370758057,
-      "attention": 0.38677284121513367
+      "attention": 0.3468761444091797
     },
     {
       "source": 3,
       "target": 0,
       "distance": 1805.9842529296875,
       "rel_vel": 8.776299476623535,
-      "attention": 0.7779476642608643
+      "attention": 0.7659658193588257
     },
     {
       "source": 3,
       "target": 1,
       "distance": 3339.6328125,
       "rel_vel": 4.584518909454346,
-      "attention": 0.46050286293029785
+      "attention": 0.4813051223754883
     },
     {
       "source": 3,
       "target": 2,
       "distance": 3958.936279296875,
       "rel_vel": 4.082160472869873,
-      "attention": 0.3975730538368225
+      "attention": 0.4098612666130066
     },
     {
       "source": 3,
       "target": 4,
       "distance": 3141.671875,
       "rel_vel": 1.7302727699279785,
-      "attention": 0.31533536314964294
+      "attention": 0.39395347237586975
     },
     {
       "source": 4,
       "target": 0,
       "distance": 2983.199462890625,
       "rel_vel": 7.373861312866211,
-      "attention": 0.6337917447090149
+      "attention": 0.613804042339325
     },
     {
       "source": 4,
       "target": 1,
       "distance": 2729.4765625,
       "rel_vel": 5.934384822845459,
-      "attention": 0.5693731307983398
+      "attention": 0.5829403400421143
     },
     {
       "source": 4,
       "target": 2,
       "distance": 5130.4208984375,
       "rel_vel": 5.106207370758057,
-      "attention": 0.38677284121513367
+      "attention": 0.3468761444091797
     },
     {
       "source": 4,
       "target": 3,
       "distance": 3141.671875,
       "rel_vel": 1.7302727699279785,
-      "attention": 0.31533536314964294
+      "attention": 0.39395347237586975
     }
   ]
 }

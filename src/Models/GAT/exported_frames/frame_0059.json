@@ -38,70 +38,70 @@
       "target": 3,
       "distance": 4393.98046875,
       "rel_vel": 9.204512596130371,
-      "attention": 0.748915433883667
+      "attention": 0.6233731508255005
     },
     {
       "source": 0,
       "target": 4,
       "distance": 6669.8017578125,
       "rel_vel": 7.902789115905762,
-      "attention": 0.5340150594711304
+      "attention": 0.37173378467559814
     },
     {
       "source": 1,
       "target": 2,
       "distance": 3117.821533203125,
       "rel_vel": 2.036909580230713,
-      "attention": 0.35461556911468506
+      "attention": 0.4212760329246521
     },
     {
       "source": 1,
       "target": 4,
       "distance": 6392.7080078125,
       "rel_vel": 8.576654434204102,
-      "attention": 0.5937752723693848
+      "attention": 0.4247688055038452
     },
     {
       "source": 2,
       "target": 1,
       "distance": 3117.821533203125,
       "rel_vel": 2.036909580230713,
-      "attention": 0.35461556911468506
+      "attention": 0.4212760329246521
     },
     {
       "source": 3,
       "target": 0,
       "distance": 4393.98046875,
       "rel_vel": 9.204512596130371,
-      "attention": 0.748915433883667
+      "attention": 0.6233731508255005
     },
     {
       "source": 3,
       "target": 4,
       "distance": 2626.517822265625,
       "rel_vel": 2.604630470275879,
-      "attention": 0.4196971654891968
+      "attention": 0.4880591928958893
     },
     {
       "source": 4,
       "target": 0,
       "distance": 6669.8017578125,
       "rel_vel": 7.902789115905762,
-      "attention": 0.5340150594711304
+      "attention": 0.37173378467559814
     },
     {
       "source": 4,
       "target": 1,
       "distance": 6392.7080078125,
       "rel_vel": 8.576654434204102,
-      "attention": 0.5937752723693848
+      "attention": 0.4247688055038452
     },
     {
       "source": 4,
       "target": 3,
       "distance": 2626.517822265625,
       "rel_vel": 2.604630470275879,
-      "attention": 0.4196971654891968
+      "attention": 0.4880591928958893
     }
   ]
 }

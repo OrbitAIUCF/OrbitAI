@@ -38,70 +38,70 @@
       "target": 1,
       "distance": 2674.307861328125,
       "rel_vel": 11.00196361541748,
-      "attention": 0.8471824526786804
+      "attention": 0.7707736492156982
     },
     {
       "source": 0,
       "target": 2,
       "distance": 5320.7275390625,
       "rel_vel": 10.384212493896484,
-      "attention": 0.6622689366340637
+      "attention": 0.5214779376983643
     },
     {
       "source": 0,
       "target": 4,
       "distance": 6855.9658203125,
       "rel_vel": 8.703381538391113,
-      "attention": 0.4828757047653198
+      "attention": 0.32877591252326965
     },
     {
       "source": 1,
       "target": 0,
       "distance": 2674.307861328125,
       "rel_vel": 11.00196361541748,
-      "attention": 0.8471824526786804
+      "attention": 0.7707736492156982
     },
     {
       "source": 1,
       "target": 2,
       "distance": 2997.253662109375,
       "rel_vel": 2.493748188018799,
-      "attention": 0.364726722240448
+      "attention": 0.4337581396102905
     },
     {
       "source": 2,
       "target": 0,
       "distance": 5320.7275390625,
       "rel_vel": 10.384212493896484,
-      "attention": 0.6622689366340637
+      "attention": 0.5214779376983643
     },
     {
       "source": 2,
       "target": 1,
       "distance": 2997.253662109375,
       "rel_vel": 2.493748188018799,
-      "attention": 0.364726722240448
+      "attention": 0.4337581396102905
     },
     {
       "source": 3,
       "target": 4,
       "distance": 2925.25341796875,
       "rel_vel": 2.1851892471313477,
-      "attention": 0.3520135283470154
+      "attention": 0.4287112355232239
     },
     {
       "source": 4,
       "target": 0,
       "distance": 6855.9658203125,
       "rel_vel": 8.703381538391113,
-      "attention": 0.4828757047653198
+      "attention": 0.32877591252326965
     },
     {
       "source": 4,
       "target": 3,
       "distance": 2925.25341796875,
       "rel_vel": 2.1851892471313477,
-      "attention": 0.3520135283470154
+      "attention": 0.4287112355232239
     }
   ]
 }

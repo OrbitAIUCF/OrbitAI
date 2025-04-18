@@ -38,70 +38,70 @@
       "target": 1,
       "distance": 6504.37060546875,
       "rel_vel": 8.971885681152344,
-      "attention": 0.6283217072486877
+      "attention": 0.44248253107070923
     },
     {
       "source": 0,
       "target": 4,
       "distance": 6643.1533203125,
       "rel_vel": 6.837273120880127,
-      "attention": 0.4776378571987152
+      "attention": 0.3354179263114929
     },
     {
       "source": 1,
       "target": 0,
       "distance": 6504.37060546875,
       "rel_vel": 8.971885681152344,
-      "attention": 0.6283217072486877
+      "attention": 0.44248253107070923
     },
     {
       "source": 1,
       "target": 2,
       "distance": 1633.3623046875,
       "rel_vel": 3.1240134239196777,
-      "attention": 0.5155852437019348
+      "attention": 0.599277675151825
     },
     {
       "source": 1,
       "target": 3,
       "distance": 6412.3056640625,
       "rel_vel": 7.240787506103516,
-      "attention": 0.5178143978118896
+      "attention": 0.3731950521469116
     },
     {
       "source": 2,
       "target": 1,
       "distance": 1633.3623046875,
       "rel_vel": 3.1240134239196777,
-      "attention": 0.5155852437019348
+      "attention": 0.599277675151825
     },
     {
       "source": 3,
       "target": 1,
       "distance": 6412.3056640625,
       "rel_vel": 7.240787506103516,
-      "attention": 0.5178143978118896
+      "attention": 0.3731950521469116
     },
     {
       "source": 3,
       "target": 4,
       "distance": 2526.044677734375,
       "rel_vel": 2.728012800216675,
-      "attention": 0.4380919933319092
+      "attention": 0.5051068067550659
     },
     {
       "source": 4,
       "target": 0,
       "distance": 6643.1533203125,
       "rel_vel": 6.837273120880127,
-      "attention": 0.4776378571987152
+      "attention": 0.3354179263114929
     },
     {
       "source": 4,
       "target": 3,
       "distance": 2526.044677734375,
       "rel_vel": 2.728012800216675,
-      "attention": 0.4380919933319092
+      "attention": 0.5051068067550659
     }
   ]
 }

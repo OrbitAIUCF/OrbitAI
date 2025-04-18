@@ -38,70 +38,70 @@
       "target": 1,
       "distance": 2202.651123046875,
       "rel_vel": 11.109155654907227,
-      "attention": 0.8741342425346375
+      "attention": 0.8112013339996338
     },
     {
       "source": 0,
       "target": 2,
       "distance": 5089.85546875,
       "rel_vel": 10.484228134155273,
-      "attention": 0.675399124622345
+      "attention": 0.5412253141403198
     },
     {
       "source": 0,
       "target": 4,
       "distance": 6658.82080078125,
       "rel_vel": 8.833935737609863,
-      "attention": 0.49661245942115784
+      "attention": 0.34732159972190857
     },
     {
       "source": 1,
       "target": 0,
       "distance": 2202.651123046875,
       "rel_vel": 11.109155654907227,
-      "attention": 0.8741342425346375
+      "attention": 0.8112013339996338
     },
     {
       "source": 1,
       "target": 2,
       "distance": 3084.291015625,
       "rel_vel": 2.369687080383301,
-      "attention": 0.35174041986465454
+      "attention": 0.42095595598220825
     },
     {
       "source": 2,
       "target": 0,
       "distance": 5089.85546875,
       "rel_vel": 10.484228134155273,
-      "attention": 0.675399124622345
+      "attention": 0.5412253141403198
     },
     {
       "source": 2,
       "target": 1,
       "distance": 3084.291015625,
       "rel_vel": 2.369687080383301,
-      "attention": 0.35174041986465454
+      "attention": 0.42095595598220825
     },
     {
       "source": 3,
       "target": 4,
       "distance": 3049.34814453125,
       "rel_vel": 1.948952555656433,
-      "attention": 0.3310135006904602
+      "attention": 0.40880197286605835
     },
     {
       "source": 4,
       "target": 0,
       "distance": 6658.82080078125,
       "rel_vel": 8.833935737609863,
-      "attention": 0.49661245942115784
+      "attention": 0.34732159972190857
     },
     {
       "source": 4,
       "target": 3,
       "distance": 3049.34814453125,
       "rel_vel": 1.948952555656433,
-      "attention": 0.3310135006904602
+      "attention": 0.40880197286605835
     }
   ]
 }

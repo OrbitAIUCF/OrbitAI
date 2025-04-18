@@ -38,70 +38,70 @@
       "target": 1,
       "distance": 6764.384765625,
       "rel_vel": 8.766203880310059,
-      "attention": 0.6134637594223022
+      "attention": 0.420195609331131
     },
     {
       "source": 0,
       "target": 4,
       "distance": 6748.14697265625,
       "rel_vel": 6.735123634338379,
-      "attention": 0.4753749668598175
+      "attention": 0.32890966534614563
     },
     {
       "source": 1,
       "target": 0,
       "distance": 6764.384765625,
       "rel_vel": 8.766203880310059,
-      "attention": 0.6134637594223022
+      "attention": 0.420195609331131
     },
     {
       "source": 1,
       "target": 2,
       "distance": 1573.513916015625,
       "rel_vel": 3.158613443374634,
-      "attention": 0.5262752175331116
+      "attention": 0.6092542409896851
     },
     {
       "source": 1,
       "target": 3,
       "distance": 6458.20947265625,
       "rel_vel": 7.235779762268066,
-      "attention": 0.5262101292610168
+      "attention": 0.376606285572052
     },
     {
       "source": 2,
       "target": 1,
       "distance": 1573.513916015625,
       "rel_vel": 3.158613443374634,
-      "attention": 0.5262752175331116
+      "attention": 0.6092542409896851
     },
     {
       "source": 3,
       "target": 1,
       "distance": 6458.20947265625,
       "rel_vel": 7.235779762268066,
-      "attention": 0.5262101292610168
+      "attention": 0.376606285572052
     },
     {
       "source": 3,
       "target": 4,
       "distance": 2442.759765625,
       "rel_vel": 2.822685956954956,
-      "attention": 0.4536115825176239
+      "attention": 0.5194191932678223
     },
     {
       "source": 4,
       "target": 0,
       "distance": 6748.14697265625,
       "rel_vel": 6.735123634338379,
-      "attention": 0.4753749668598175
+      "attention": 0.32890966534614563
     },
     {
       "source": 4,
       "target": 3,
       "distance": 2442.759765625,
       "rel_vel": 2.822685956954956,
-      "attention": 0.4536115825176239
+      "attention": 0.5194191932678223
     }
   ]
 }

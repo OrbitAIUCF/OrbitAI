@@ -38,140 +38,140 @@
       "target": 1,
       "distance": 2990.92333984375,
       "rel_vel": 10.648548126220703,
-      "attention": 0.8290901184082031
+      "attention": 0.7436351776123047
     },
     {
       "source": 0,
       "target": 2,
       "distance": 2793.75341796875,
       "rel_vel": 9.697014808654785,
-      "attention": 0.7867422103881836
+      "attention": 0.7247922420501709
     },
     {
       "source": 0,
       "target": 3,
       "distance": 1138.40625,
       "rel_vel": 8.883983612060547,
-      "attention": 0.8355226516723633
+      "attention": 0.8361386060714722
     },
     {
       "source": 0,
       "target": 4,
       "distance": 3319.934814453125,
       "rel_vel": 7.137714862823486,
-      "attention": 0.6124690771102905
+      "attention": 0.5835539102554321
     },
     {
       "source": 1,
       "target": 0,
       "distance": 2990.92333984375,
       "rel_vel": 10.648548126220703,
-      "attention": 0.8290901184082031
+      "attention": 0.7436351776123047
     },
     {
       "source": 1,
       "target": 2,
       "distance": 2942.807861328125,
       "rel_vel": 1.2615596055984497,
-      "attention": 0.3029230237007141
+      "attention": 0.3951483368873596
     },
     {
       "source": 1,
       "target": 3,
       "distance": 3404.27392578125,
       "rel_vel": 4.372854232788086,
-      "attention": 0.4518616795539856
+      "attention": 0.4724661707878113
     },
     {
       "source": 1,
       "target": 4,
       "distance": 2309.65185546875,
       "rel_vel": 6.056558609008789,
-      "attention": 0.6092810034751892
+      "attention": 0.6295372247695923
     },
     {
       "source": 2,
       "target": 0,
       "distance": 2793.75341796875,
       "rel_vel": 9.697014808654785,
-      "attention": 0.7867422103881836
+      "attention": 0.7247922420501709
     },
     {
       "source": 2,
       "target": 1,
       "distance": 2942.807861328125,
       "rel_vel": 1.2615596055984497,
-      "attention": 0.3029230237007141
+      "attention": 0.3951483368873596
     },
     {
       "source": 2,
       "target": 3,
       "distance": 3809.740478515625,
       "rel_vel": 3.9875307083129883,
-      "attention": 0.40698081254959106
+      "attention": 0.4232376515865326
     },
     {
       "source": 2,
       "target": 4,
       "distance": 4733.04345703125,
       "rel_vel": 5.349481582641602,
-      "attention": 0.4309607148170471
+      "attention": 0.39525744318962097
     },
     {
       "source": 3,
       "target": 0,
       "distance": 1138.40625,
       "rel_vel": 8.883983612060547,
-      "attention": 0.8355226516723633
+      "attention": 0.8361386060714722
     },
     {
       "source": 3,
       "target": 1,
       "distance": 3404.27392578125,
       "rel_vel": 4.372854232788086,
-      "attention": 0.4518616795539856
+      "attention": 0.4724661707878113
     },
     {
       "source": 3,
       "target": 2,
       "distance": 3809.740478515625,
       "rel_vel": 3.9875307083129883,
-      "attention": 0.40698081254959106
+      "attention": 0.4232376515865326
     },
     {
       "source": 3,
       "target": 4,
       "distance": 2905.74560546875,
       "rel_vel": 2.1947343349456787,
-      "attention": 0.3576212525367737
+      "attention": 0.433378666639328
     },
     {
       "source": 4,
       "target": 0,
       "distance": 3319.934814453125,
       "rel_vel": 7.137714862823486,
-      "attention": 0.6124690771102905
+      "attention": 0.5835539102554321
     },
     {
       "source": 4,
       "target": 1,
       "distance": 2309.65185546875,
       "rel_vel": 6.056558609008789,
-      "attention": 0.6092810034751892
+      "attention": 0.6295372247695923
     },
     {
       "source": 4,
       "target": 2,
       "distance": 4733.04345703125,
       "rel_vel": 5.349481582641602,
-      "attention": 0.4309607148170471
+      "attention": 0.39525744318962097
     },
     {
       "source": 4,
       "target": 3,
       "distance": 2905.74560546875,
       "rel_vel": 2.1947343349456787,
-      "attention": 0.3576212525367737
+      "attention": 0.433378666639328
     }
   ]
 }

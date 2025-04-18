@@ -75,7 +75,7 @@ class OrbitGNN(nn.Module):
 
     # Hardcoded Attention
     @staticmethod
-    def apply_hardcoded_attention(graph_list, proximity_threshold=7000.0, w_vel=0.6, w_dist=0.4):
+    def apply_hardcoded_attention(graph_list, proximity_threshold=7000.0, w_vel=0.4, w_dist=0.6):
         """
         For each PyG Data object in graph_list, compute a hardcoded 'attention' score
         based on relative velocity and distance:

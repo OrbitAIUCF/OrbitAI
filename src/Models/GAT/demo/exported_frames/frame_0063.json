@@ -38,70 +38,70 @@
       "target": 3,
       "distance": 4985.677734375,
       "rel_vel": 8.778428077697754,
-      "attention": 0.7151041626930237
+      "attention": 0.5726562142372131
     },
     {
       "source": 0,
       "target": 4,
       "distance": 6999.1318359375,
       "rel_vel": 7.454870223999023,
-      "attention": 0.5095852613449097
+      "attention": 0.33976486325263977
     },
     {
       "source": 1,
       "target": 2,
       "distance": 2930.06884765625,
       "rel_vel": 2.2700793743133545,
-      "attention": 0.3877260088920593
+      "attention": 0.45229026675224304
     },
     {
       "source": 1,
       "target": 4,
       "distance": 6497.44873046875,
       "rel_vel": 8.338465690612793,
-      "attention": 0.5986461043357849
+      "attention": 0.4230284094810486
     },
     {
       "source": 2,
       "target": 1,
       "distance": 2930.06884765625,
       "rel_vel": 2.2700793743133545,
-      "attention": 0.3877260088920593
+      "attention": 0.45229026675224304
     },
     {
       "source": 3,
       "target": 0,
       "distance": 4985.677734375,
       "rel_vel": 8.778428077697754,
-      "attention": 0.7151041626930237
+      "attention": 0.5726562142372131
     },
     {
       "source": 3,
       "target": 4,
       "distance": 2290.858642578125,
       "rel_vel": 2.979890823364258,
-      "attention": 0.4727674722671509
+      "attention": 0.5394231677055359
     },
     {
       "source": 4,
       "target": 0,
       "distance": 6999.1318359375,
       "rel_vel": 7.454870223999023,
-      "attention": 0.5095852613449097
+      "attention": 0.33976486325263977
     },
     {
       "source": 4,
       "target": 1,
       "distance": 6497.44873046875,
       "rel_vel": 8.338465690612793,
-      "attention": 0.5986461043357849
+      "attention": 0.4230284094810486
     },
     {
       "source": 4,
       "target": 3,
       "distance": 2290.858642578125,
       "rel_vel": 2.979890823364258,
-      "attention": 0.4727674722671509
+      "attention": 0.5394231677055359
     }
   ]
 }

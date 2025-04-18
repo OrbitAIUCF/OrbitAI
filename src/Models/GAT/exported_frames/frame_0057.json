@@ -38,70 +38,70 @@
       "target": 3,
       "distance": 4144.8564453125,
       "rel_vel": 9.370241165161133,
-      "attention": 0.7631510496139526
+      "attention": 0.644726574420929
     },
     {
       "source": 0,
       "target": 4,
       "distance": 6505.5283203125,
       "rel_vel": 8.112359046936035,
-      "attention": 0.5477101802825928
+      "attention": 0.3886864185333252
     },
     {
       "source": 1,
       "target": 2,
       "distance": 3198.8955078125,
       "rel_vel": 1.9243732690811157,
-      "attention": 0.3404284119606018
+      "attention": 0.4079572260379791
     },
     {
       "source": 1,
       "target": 4,
       "distance": 6362.7021484375,
       "rel_vel": 8.675301551818848,
-      "attention": 0.5919183492660522
+      "attention": 0.4249597489833832
     },
     {
       "source": 2,
       "target": 1,
       "distance": 3198.8955078125,
       "rel_vel": 1.9243732690811157,
-      "attention": 0.3404284119606018
+      "attention": 0.4079572260379791
     },
     {
       "source": 3,
       "target": 0,
       "distance": 4144.8564453125,
       "rel_vel": 9.370241165161133,
-      "attention": 0.7631510496139526
+      "attention": 0.644726574420929
     },
     {
       "source": 3,
       "target": 4,
       "distance": 2776.6923828125,
       "rel_vel": 2.3982350826263428,
-      "attention": 0.39489686489105225
+      "attention": 0.46437448263168335
     },
     {
       "source": 4,
       "target": 0,
       "distance": 6505.5283203125,
       "rel_vel": 8.112359046936035,
-      "attention": 0.5477101802825928
+      "attention": 0.3886864185333252
     },
     {
       "source": 4,
       "target": 1,
       "distance": 6362.7021484375,
       "rel_vel": 8.675301551818848,
-      "attention": 0.5919183492660522
+      "attention": 0.4249597489833832
     },
     {
       "source": 4,
       "target": 3,
       "distance": 2776.6923828125,
       "rel_vel": 2.3982350826263428,
-      "attention": 0.39489686489105225
+      "attention": 0.46437448263168335
     }
   ]
 }

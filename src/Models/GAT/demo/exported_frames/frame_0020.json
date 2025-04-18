@@ -38,70 +38,70 @@
       "target": 1,
       "distance": 2934.43896484375,
       "rel_vel": 10.932933807373047,
-      "attention": 0.8323178291320801
+      "attention": 0.7484766840934753
     },
     {
       "source": 0,
       "target": 2,
       "distance": 5452.21533203125,
       "rel_vel": 10.323083877563477,
-      "attention": 0.6549762487411499
+      "attention": 0.5103548765182495
     },
     {
       "source": 0,
       "target": 4,
       "distance": 6956.5859375,
       "rel_vel": 8.633336067199707,
-      "attention": 0.47627878189086914
+      "attention": 0.31958648562431335
     },
     {
       "source": 1,
       "target": 0,
       "distance": 2934.43896484375,
       "rel_vel": 10.932933807373047,
-      "attention": 0.8323178291320801
+      "attention": 0.7484766840934753
     },
     {
       "source": 1,
       "target": 2,
       "distance": 2951.453369140625,
       "rel_vel": 2.555081844329834,
-      "attention": 0.37156856060028076
+      "attention": 0.44050028920173645
     },
     {
       "source": 2,
       "target": 0,
       "distance": 5452.21533203125,
       "rel_vel": 10.323083877563477,
-      "attention": 0.6549762487411499
+      "attention": 0.5103548765182495
     },
     {
       "source": 2,
       "target": 1,
       "distance": 2951.453369140625,
       "rel_vel": 2.555081844329834,
-      "attention": 0.37156856060028076
+      "attention": 0.44050028920173645
     },
     {
       "source": 3,
       "target": 4,
       "distance": 2857.961669921875,
       "rel_vel": 2.299638271331787,
-      "attention": 0.36289218068122864
+      "attention": 0.4391680359840393
     },
     {
       "source": 4,
       "target": 0,
       "distance": 6956.5859375,
       "rel_vel": 8.633336067199707,
-      "attention": 0.47627878189086914
+      "attention": 0.31958648562431335
     },
     {
       "source": 4,
       "target": 3,
       "distance": 2857.961669921875,
       "rel_vel": 2.299638271331787,
-      "attention": 0.36289218068122864
+      "attention": 0.4391680359840393
     }
   ]
 }

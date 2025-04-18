@@ -38,70 +38,70 @@
       "target": 3,
       "distance": 4532.2734375,
       "rel_vel": 9.10960865020752,
-      "attention": 0.7410129904747009
+      "attention": 0.611519455909729
     },
     {
       "source": 0,
       "target": 4,
       "distance": 6752.64990234375,
       "rel_vel": 7.7939300537109375,
-      "attention": 0.5274778008460999
+      "attention": 0.3634304106235504
     },
     {
       "source": 1,
       "target": 2,
       "distance": 3073.996826171875,
       "rel_vel": 2.0946033000946045,
-      "attention": 0.36230307817459106
+      "attention": 0.4284879267215729
     },
     {
       "source": 1,
       "target": 4,
       "distance": 6413.62939453125,
       "rel_vel": 8.522082328796387,
-      "attention": 0.5948097705841064
+      "attention": 0.4244622588157654
     },
     {
       "source": 2,
       "target": 1,
       "distance": 3073.996826171875,
       "rel_vel": 2.0946033000946045,
-      "attention": 0.36230307817459106
+      "attention": 0.4284879267215729
     },
     {
       "source": 3,
       "target": 0,
       "distance": 4532.2734375,
       "rel_vel": 9.10960865020752,
-      "attention": 0.7410129904747009
+      "attention": 0.611519455909729
     },
     {
       "source": 3,
       "target": 4,
       "distance": 2546.87548828125,
       "rel_vel": 2.703294515609741,
-      "attention": 0.4325154423713684
+      "attention": 0.5003972053527832
     },
     {
       "source": 4,
       "target": 0,
       "distance": 6752.64990234375,
       "rel_vel": 7.7939300537109375,
-      "attention": 0.5274778008460999
+      "attention": 0.3634304106235504
     },
     {
       "source": 4,
       "target": 1,
       "distance": 6413.62939453125,
       "rel_vel": 8.522082328796387,
-      "attention": 0.5948097705841064
+      "attention": 0.4244622588157654
     },
     {
       "source": 4,
       "target": 3,
       "distance": 2546.87548828125,
       "rel_vel": 2.703294515609741,
-      "attention": 0.4325154423713684
+      "attention": 0.5003972053527832
     }
   ]
 }

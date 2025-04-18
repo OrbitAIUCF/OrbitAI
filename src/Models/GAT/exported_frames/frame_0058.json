@@ -38,70 +38,70 @@
       "target": 3,
       "distance": 4264.35498046875,
       "rel_vel": 9.291431427001953,
-      "attention": 0.7563226222991943
+      "attention": 0.6344838738441467
     },
     {
       "source": 0,
       "target": 4,
       "distance": 6587.28466796875,
       "rel_vel": 8.00903034210205,
-      "attention": 0.5407719016075134
+      "attention": 0.380167692899704
     },
     {
       "source": 1,
       "target": 2,
       "distance": 3159.47216796875,
       "rel_vel": 1.9800649881362915,
-      "attention": 0.3473226726055145
+      "attention": 0.41443073749542236
     },
     {
       "source": 1,
       "target": 4,
       "distance": 6375.66796875,
       "rel_vel": 8.627753257751465,
-      "attention": 0.5928186774253845
+      "attention": 0.4249425530433655
     },
     {
       "source": 2,
       "target": 1,
       "distance": 3159.47216796875,
       "rel_vel": 1.9800649881362915,
-      "attention": 0.3473226726055145
+      "attention": 0.41443073749542236
     },
     {
       "source": 3,
       "target": 0,
       "distance": 4264.35498046875,
       "rel_vel": 9.291431427001953,
-      "attention": 0.7563226222991943
+      "attention": 0.6344838738441467
     },
     {
       "source": 3,
       "target": 4,
       "distance": 2703.153564453125,
       "rel_vel": 2.5029077529907227,
-      "attention": 0.4071609377861023
+      "attention": 0.4760523736476898
     },
     {
       "source": 4,
       "target": 0,
       "distance": 6587.28466796875,
       "rel_vel": 8.00903034210205,
-      "attention": 0.5407719016075134
+      "attention": 0.380167692899704
     },
     {
       "source": 4,
       "target": 1,
       "distance": 6375.66796875,
       "rel_vel": 8.627753257751465,
-      "attention": 0.5928186774253845
+      "attention": 0.4249425530433655
     },
     {
       "source": 4,
       "target": 3,
       "distance": 2703.153564453125,
       "rel_vel": 2.5029077529907227,
-      "attention": 0.4071609377861023
+      "attention": 0.4760523736476898
     }
   ]
 }

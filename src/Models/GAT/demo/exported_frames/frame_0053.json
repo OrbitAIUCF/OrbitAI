@@ -38,70 +38,70 @@
       "target": 3,
       "distance": 3797.8916015625,
       "rel_vel": 9.602408409118652,
-      "attention": 0.7829776406288147
+      "attention": 0.6744664907455444
     },
     {
       "source": 0,
       "target": 4,
       "distance": 6195.14794921875,
       "rel_vel": 8.491281509399414,
-      "attention": 0.5765635371208191
+      "attention": 0.42270198464393616
     },
     {
       "source": 1,
       "target": 2,
       "distance": 3333.404541015625,
       "rel_vel": 1.7200500965118408,
-      "attention": 0.31699591875076294
+      "attention": 0.3859303891658783
     },
     {
       "source": 1,
       "target": 4,
       "distance": 6354.63525390625,
       "rel_vel": 8.82880973815918,
-      "attention": 0.5885401964187622
+      "attention": 0.4230917990207672
     },
     {
       "source": 2,
       "target": 1,
       "distance": 3333.404541015625,
       "rel_vel": 1.7200500965118408,
-      "attention": 0.31699591875076294
+      "attention": 0.3859303891658783
     },
     {
       "source": 3,
       "target": 0,
       "distance": 3797.8916015625,
       "rel_vel": 9.602408409118652,
-      "attention": 0.7829776406288147
+      "attention": 0.6744664907455444
     },
     {
       "source": 3,
       "target": 4,
       "distance": 3038.196044921875,
       "rel_vel": 1.9523632526397705,
-      "attention": 0.3483808934688568
+      "attention": 0.4209112524986267
     },
     {
       "source": 4,
       "target": 0,
       "distance": 6195.14794921875,
       "rel_vel": 8.491281509399414,
-      "attention": 0.5765635371208191
+      "attention": 0.42270198464393616
     },
     {
       "source": 4,
       "target": 1,
       "distance": 6354.63525390625,
       "rel_vel": 8.82880973815918,
-      "attention": 0.5885401964187622
+      "attention": 0.4230917990207672
     },
     {
       "source": 4,
       "target": 3,
       "distance": 3038.196044921875,
       "rel_vel": 1.9523632526397705,
-      "attention": 0.3483808934688568
+      "attention": 0.4209112524986267
     }
   ]
 }
