@@ -173,17 +173,21 @@ class OrbitGNN(nn.Module):
 
             # 3) build edges with attention
             edges = []
-            for (src, tgt), (dist, rel_vel), attn in zip(
-                    data.edge_index.t().tolist(),
-                    data.edge_attr.tolist(),
-                    attn_list
-                ):
+            num_edges = data.edge_index.size(1)
+            if len(attn_list) != num_edges:
+                print(f"[WARN] Frame {i}: {num_edges} edges but {len(attn_list)} attention scores")
+
+            for e_idx in range(num_edges):
+                src = int(data.edge_index[0, e_idx])
+                tgt = int(data.edge_index[1, e_idx])
+                dist, rel_vel = data.edge_attr[e_idx].tolist()
+                attn = attn_list[e_idx] if e_idx < len(attn_list) else 0.0
                 edges.append({
-                    "source":     src,
-                    "target":     tgt,
-                    "distance":   dist,
-                    "rel_vel":    rel_vel,
-                    "attention":  attn
+                    "source":    src,
+                    "target":    tgt,
+                    "distance":  dist,
+                    "rel_vel":   rel_vel,
+                    "attention": attn
                 })
 
             # 4) assemble frame
