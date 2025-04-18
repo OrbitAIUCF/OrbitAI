@@ -195,7 +195,9 @@ function buildStage() {
     });
 
     
-    const maxEdges = frames[0].edges.length;
+    //const maxEdges = frames[0].edges.length;
+    const maxEdges = Math.max(...frames.map(f => f.edges.length));
+
     const edgeGeo  = new THREE.BufferGeometry();
     const positions = new Float32Array(maxEdges * 2 * 3);
     edgeGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
@@ -244,6 +246,14 @@ function updateStage(frame) {
         colorAttr.array[cidx++] = c.b;
     });
 
+    for (; idx < posAttr.array.length; idx++) {
+        posAttr.array[idx] = 0;
+    }
+    for (; cidx < colorAttr.array.length; cidx++) {
+        colorAttr.array[cidx] = 0;
+    }
+
+  
     posAttr.needsUpdate   = true;
     colorAttr.needsUpdate = true;
 
