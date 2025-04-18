@@ -122,57 +122,69 @@ function init() {
     gridXY.rotation.x = Math.PI / 2;
     scene.add(gridXY);
 
+    gridXZ.position.y = -7000;
+    gridYZ.position.x = -7000;
+    gridXY.position.z = -7000;
+
     // 4) Outline cube edges for clarity
-    const boxGeo   = new THREE.BoxGeometry(gridSize, gridSize, gridSize);
-    const edges    = new THREE.EdgesGeometry(boxGeo);
-    const line     = new THREE.LineSegments(
-        edges,
-        new THREE.LineBasicMaterial({ color: 0x444444, transparent: true, opacity: 0.5 })
-    );
-    scene.add(line);
+    // const boxGeo   = new THREE.BoxGeometry(gridSize, gridSize, gridSize);
+    // const edges    = new THREE.EdgesGeometry(boxGeo);
+    // const line     = new THREE.LineSegments(
+    //     edges,
+    //     new THREE.LineBasicMaterial({ color: 0x444444, transparent: true, opacity: 0.5 })
+    // );
+    // scene.add(line);
 
-    const axesDirections = [
-        { dir: new THREE.Vector3(1,0,0), color: 0xff0000,   label: 'X' },
-        { dir: new THREE.Vector3(0,1,0), color: 0x00ff00,   label: 'Y' },
-        { dir: new THREE.Vector3(0,0,1), color: 0x0000ff,   label: 'Z' },
+    const axes = [
+        {
+          // X‐axis
+          arrowDir:  new THREE.Vector3(1,0,0),
+          labelPos:  new THREE.Vector3( 7200,  -7200,  -7200),
+          color:     0xff0000,
+          name:      'X',
+        },
+        {
+          // Y‐axis
+          arrowDir:  new THREE.Vector3(0,1,0),
+          labelPos:  new THREE.Vector3( -7200,  7200,  -7200),
+          color:     0x00ff00,
+          name:      'Y',
+        },
+        {
+          // Z‐axis
+          arrowDir:  new THREE.Vector3(0,0,1),
+          labelPos:  new THREE.Vector3( -7200,  -7200,  7200),
+          color:     0x0000ff,
+          name:      'Z',
+        },
       ];
-      const tickValues = [-7000, 0, 7000];
-      axesDirections.forEach(({ dir, color, label }) => {
-        const axisGroup = new THREE.Group();
       
-        // 1) ArrowHelper in the right color
-        const arrow = new THREE.ArrowHelper(
-          dir,                           // direction
-          new THREE.Vector3(),           // origin
-          7000,                          // length
-          color,                         // color
-          200,                           // headLength
-          100                            // headWidth
+      axes.forEach(axis=>{
+        // ——— ArrowHelper ———
+        const origin = new THREE.Vector3(-7000, -7000, -7000);
+        const arrow  = new THREE.ArrowHelper(
+          axis.arrowDir,  // direction
+          origin,         // arrow base
+          14000,          // length
+          axis.color,     // color
+          200,            // headLength
+          100             // headWidth
         );
-        axisGroup.add(arrow);
+        scene.add(arrow);
       
-        // 2) Axis name at +7500
-        const nameSprite = makeTextSprite(label, {
-            fontsize: 32,
-            backgroundColor: 'rgba(0,0,0,0.5)'
-        });
-        nameSprite.position.copy(dir.clone().multiplyScalar(7500));
-        axisGroup.add(nameSprite);
-
-        // 3) Tick‐mark labels
-        const tickSprites = tickValues.map(v => {
-            const tickSprite = makeTextSprite(String(v), {
-            fontsize: 20,
-            backgroundColor: 'rgba(0,0,0,0.3)'
-            });
-            tickSprite.position.copy(dir.clone().multiplyScalar(v));
-            return tickSprite;
-        });
-        tickSprites.forEach(s => axisGroup.add(s));
-
-        scene.add(axisGroup);
-      });
-
+        // ——— CSS2D label ———
+        const div = document.createElement('div');
+        div.className   = 'axisLabel';
+        div.textContent = axis.name;
+        // style it purely in CSS:
+        div.style.color     = '#ffffff';
+        div.style.fontSize  = '24px';
+        div.style.fontWeight= 'bold';
+        div.style.pointerEvents = 'none';
+        const label = new CSS2DObject(div);
+        label.position.copy(axis.labelPos);
+        scene.add(label);
+      });      
 }
 
 function buildStage() {
