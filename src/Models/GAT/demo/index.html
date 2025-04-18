@@ -5,7 +5,7 @@
     <title>OrbitAI Demo</title>
     <style>
         .label {
-            color: white;
+          color: white;
         }
         .overlay {
           position: absolute;
@@ -25,7 +25,7 @@
           padding: 6px;
           border-radius: 4px;
         }
-        
+        /*
         #riskTable {
           bottom: 10px; right: 10px;
           max-height: 40vh;
@@ -43,8 +43,7 @@
           padding: 4px 6px;
           border: 1px solid #444;
           text-align: center;
-        }
-        /*
+        }*/
         #riskTableContainer {
           position: absolute;
           bottom: 0;
@@ -55,7 +54,6 @@
           background: rgba(0, 0, 0, 0.7);
           color: white;
           padding: 10px;
-          font-family: sans-serif;
           font-size: 14px;
           border: 1px solid #444;
         }
@@ -67,7 +65,10 @@
         #riskTable td {
           padding: 4px 6px;
           border-top: 1px solid #333;
-        }*/
+          text-align: center;
+        }
+        
+
       </style>           
 </head>
 <body>
@@ -86,13 +87,13 @@
       <button id="slowerBtn">➖</button>
     </div>
     <div id="timeLabel" class="overlay"></div>
-    <div id="riskTable" class="overlay">
-      <table>
+    <div id="riskTableContainer">
+      <table id="riskTable">
         <thead>
           <tr>
             <th>Source</th>
-            <th>Distance (km)</th>
-            <th>Rel. Vel. (m/s)</th>
+            <th>Dist</th>
+            <th>RelVel</th>
             <th>Risk</th>
             <th>Target</th>
           </tr>

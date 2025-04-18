@@ -266,8 +266,6 @@ function updateStage(frame) {
     posAttr.needsUpdate = true;
     */
 
-}
-
 function formatTime(ts){
     const dt = new Date(ts);
     return new Intl.DateTimeFormat('en-US',{
